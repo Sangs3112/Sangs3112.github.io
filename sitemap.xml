@@ -2,9 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://sangs3112.github.io/2024/03/05/hello-world/</loc>
+    <loc>https://sangs3112.github.io/2024/03/06/googlea12c1ab75804fd8f/</loc>
     
-    <lastmod>2024-03-05</lastmod>
+    <lastmod>2024-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sangs3112.github.io/2024/03/06/hello-world/</loc>
+    
+    <lastmod>2024-03-06</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -13,7 +22,7 @@
 
   <url>
     <loc>https://sangs3112.github.io/</loc>
-    <lastmod>2024-03-05</lastmod>
+    <lastmod>2024-03-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
