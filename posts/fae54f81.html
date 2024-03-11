@@ -1,0 +1,646 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MySQL笔记_0 | Sangs</title><meta name="author" content="Sangs"><meta name="copyright" content="Sangs"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="创建数据库 字符集选择: utf8mb4  Unicode编码，也称作统一码，万国码。如：utf8, utf16, utf32 utf8mb4兼容utf8，并且可以表示更多的字符。具体来说:  Unicode中的第1-126行是utf8的区域，utf8mb4同样兼容这一片区域，剩下126行以下的部分是utf8mb4扩充区域。   一般不选择utf8，因为其占用三个字节；而实际上很多内容，比如表情，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL笔记_0">
+<meta property="og:url" content="https://sangs3112.github.io/posts/fae54f81.html">
+<meta property="og:site_name" content="Sangs">
+<meta property="og:description" content="创建数据库 字符集选择: utf8mb4  Unicode编码，也称作统一码，万国码。如：utf8, utf16, utf32 utf8mb4兼容utf8，并且可以表示更多的字符。具体来说:  Unicode中的第1-126行是utf8的区域，utf8mb4同样兼容这一片区域，剩下126行以下的部分是utf8mb4扩充区域。   一般不选择utf8，因为其占用三个字节；而实际上很多内容，比如表情，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sangs3112.github.io/img/avatar.png">
+<meta property="article:published_time" content="2024-03-10T07:05:56.000Z">
+<meta property="article:modified_time" content="2024-03-11T10:35:53.074Z">
+<meta property="article:author" content="Sangs">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sangs3112.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sangs3112.github.io/posts/fae54f81.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><meta name="google-site-verification" content="https://github.com/Sangs3112/Sangs3112.github.io/blob/master/googlea12c1ab75804fd8f.html"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySQL笔记_0',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-11 18:35:53'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Sangs" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Sangs"><span class="site-name">Sangs</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">MySQL笔记_0</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-03-10T07:05:56.000Z" title="发表于 2024-03-10 15:05:56">2024-03-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-11T10:35:53.074Z" title="更新于 2024-03-11 18:35:53">2024-03-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1>创建数据库</h1>
+<h2 id="字符集选择-utf8mb4">字符集选择: <code>utf8mb4</code></h2>
+<ul>
+<li><code>Unicode</code>编码，也称作统一码，万国码。如：<code>utf8, utf16, utf32</code></li>
+<li><code>utf8mb4</code>兼容<code>utf8</code>，并且可以表示更多的字符。具体来说:  <div class="note default flat"><p><code>Unicode</code>中的第<code>1-126</code>行是<code>utf8</code>的区域，<code>utf8mb4</code>同样兼容这一片区域，剩下<code>126</code>行以下的部分是<code>utf8mb4</code>扩充区域。</p>
+</div>
+</li>
+<li>一般不选择<code>utf8</code>，因为其占用三个字节；而实际上很多内容，比如表情，就需要四字节空间，所以一般使用<code>utf8mb4</code></li>
+</ul>
+<h2 id="排序规则选择：">排序规则选择：</h2>
+<ul>
+<li>对于<code>utf8mb4</code>而言，常用的排序规则有<code>utf8mb4_unicode_ci</code>，<code>utf8mb4_general_ci</code>，<code>utf8mb4_bin</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><code>utf8mb4_unicode_ci</code></th>
+<th style="text-align:center"><code>utf8mb4_general_ci</code></th>
+<th style="text-align:center"><code>utf8mb4_bin</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>基于标准的Unicode</strong>规则来排序和比较</td>
+<td style="text-align:center">没有实现Unicode排序规则</td>
+<td style="text-align:center">将字符串的每个字符用二进制数据编译存储</td>
+</tr>
+<tr>
+<td style="text-align:center">各语言<strong>精确排序</strong></td>
+<td style="text-align:center">在某些特殊语言字符集，排序结果可能不一致</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>不区分大小写</strong></td>
+<td style="text-align:center"><strong>不区分大小写</strong></td>
+<td style="text-align:center"><strong>区分大小写</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">为了能够处理特殊字符，实现了略微复杂的排序算法</td>
+<td style="text-align:center">比较和排序的时候更快</td>
+<td style="text-align:center"> </td>
+</tr>
+</tbody>
+</table>
+<h1><code>SQL</code>分类</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">分类</th>
+<th style="text-align:center">全称</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">DDL</td>
+<td style="text-align:center">Data Definition Language</td>
+<td style="text-align:center">数据定义语言，定义数据库、表、字段</td>
+</tr>
+<tr>
+<td style="text-align:center">DML</td>
+<td style="text-align:center">Data Manipulation Language</td>
+<td style="text-align:center">数据操作语言，对数据<strong>增删改</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">DQL</td>
+<td style="text-align:center">Data Query Language</td>
+<td style="text-align:center">数据查询语言，<strong>查</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">DCL</td>
+<td style="text-align:center">Data Control Language</td>
+<td style="text-align:center">数据控制语言，创建数据库用户，设置访问权限</td>
+</tr>
+</tbody>
+</table>
+<h2 id="DDL"><code>DDL</code></h2>
+<h3 id="查">查</h3>
+<ul>
+<li>
+<p>查询<strong>所有</strong>数据库: <code>show databases;</code></p>
+</li>
+<li>
+<p>查询当前数据库: <code>select database();</code></p>
+</li>
+<li>
+<p>查询当前数据库中<strong>所有</strong>的表: <code>show tables;</code></p>
+</li>
+<li>
+<p>查询表结构: <code>desc 表名;</code></p>
+</li>
+<li>
+<p>查询建表语句: <code>show create table 表名;</code></p>
+</li>
+</ul>
+<h3 id="增">增</h3>
+<ul>
+<li>
+<p>创建数据库: <code>create database [if not exists] 数据库名 [default charset 字符集] [collate 排序规则];</code></p>
+</li>
+<li>
+<p>创建表: <code>create table 表名 (字段名 字段类型 [comment '字段注释'], 字段名 字段类型 [comment '字段注释'], ...) [comment '表注释'];</code></p>
+</li>
+<li>
+<p>添加表字段: <code>alter table 表名 add 字段名 类型 [comment '字段注释'];</code></p>
+</li>
+</ul>
+<h3 id="删">删</h3>
+<ul>
+<li>
+<p>删除数据库: <code>drop database [if exists] 数据库名;</code></p>
+</li>
+<li>
+<p>删除表: <code>drop table [if exists] 表名;</code></p>
+</li>
+<li>
+<p>删除并重新创建表: <code>truncate table 表名;</code></p>
+</li>
+<li>
+<p>删除字段: <code>alter table 表名 drop 字段名;</code></p>
+</li>
+</ul>
+<h3 id="改">改</h3>
+<ul>
+<li>
+<p>修改表名: <code>alter table 表名 rename to 新表名;</code></p>
+</li>
+<li>
+<p>修改字段数据类型: <code>alter table 表名 modify 字段名 新类型;</code></p>
+</li>
+<li>
+<p>修改字段名和数据类型: <code>alter table 表名 change 原字段名 新字段名 类型 [comment '字段注释'];</code></p>
+</li>
+</ul>
+<h3 id="类型">类型</h3>
+<table>
+    <tr>
+        <th>分类</th><th>类型</th><th>大小</th><th>有符号范围</th><th>无符号范围</th><th>描述</th>
+    </tr>
+    <tr>
+        <td rowspan="8">数值</td>
+        <td>TINYINT</td><td>1B</td><td>(-128, 127)</td><td>(0, 255)</td><td></td>
+    </tr>
+    <tr>
+        <td>SMALLINT</td><td>2B</td><td>(-32768, 32767)</td><td>(0, 65535)</td><td></td>
+    </tr>
+    <tr>
+        <td>MIDIUMINT</td><td>3B</td><td>(-8388608, 8388607)</td><td>(0, 16777215)</td><td></td>
+    </tr>
+    <tr>
+        <td>INT or INTEGER</td><td>4B</td><td>(-2147483648, 2147483647)</td><td>(0, 4294967295)</td><td></td>
+    </tr>
+    <tr>
+        <td>BIGINT</td><td>8B</td><td>(-2^63, 2^63 - 1)</td><td>(0, 2^64 - 1)</td><td></td>
+    </tr>
+    <tr>
+        <td>FLOAT</td><td>4B</td><td>(-3.4028E+38, 3.4028E+38)</td><td>0 and (1.17549E-38, 3.4028E+38)</td><td></td>
+    </tr>
+    <tr>
+        <td>DOUBLE</td><td>8B</td><td>(-1.79769E+308, 1.79769E+308)</td><td>0 and (2.22507E-308, 1.79769E+308)</td><td></td>
+    </tr>
+    <tr>
+        <td>DECIMAL</td><td></td><td>由M(精度),D(标度)决定</td><td>由M(精度),D(标度)决定</td><td>精确定点数</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <th>分类</th><th>类型</th><th>大小</th><th>描述</th>
+    </tr>
+    <tr>
+        <td rowspan="10">字符串</td>
+        <td>CHAR</td><td>(0, 255B)</td><td>定长字符串</td>
+    </tr>
+    <tr>
+        <td>VARCHAR</td><td>(0, 65535B)</td><td>变长字符串</td>
+    </tr>
+    <tr>
+        <td>TINYBLOB</td><td>(0, 255B)</td><td>不超过255个字符的二进制数据</td>
+    </tr>
+    <tr>
+        <td>TINYTEXT</td><td>(0, 255B)</td><td>短文本</td>
+    </tr>
+    <tr>
+        <td>BLOB</td><td>(0, 65535B)</td><td>二进制长文本</td>
+    </tr>
+    <tr>
+        <td>TEXT</td><td>(0, 65535B)</td><td>长文本</td>
+    </tr>
+    <tr>
+        <td>MEDIUMBLOB</td><td>(0, 16777215B)</td><td></td>
+    </tr>
+    <tr>
+        <td>MEDIUMTEXT</td><td>(0, 16777251B)</td><td></td>
+    </tr>
+    <tr>
+        <td>LONGBLOB</td><td>(0, 4294967295B)</td><td></td>
+    </tr>
+    <tr>
+        <td>LONGTEXT</td><td>(0, 4294967295B)</td><td></td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <th>分类</th><th>类型</th><th>大小</th><th>范围</th>
+    </tr>
+    <tr>
+        <td rowspan="5">日期</td>
+        <td>DATE</td><td>3B</td><td>1000-01-01至9999-12-31</td>
+    </tr>
+    <tr>
+        <td>TIME</td><td>3B</td><td>-838:59:59至838:59:59</td>
+    </tr>
+    <tr>
+        <td>YEAR</td><td>1B</td><td>1901至2155</td>
+    </tr>
+    <tr>
+        <td>DATETIME</td><td>8B</td><td>1000-01-01 00:00:00至9999-12-31 23:59:59</td>
+    </tr>
+    <tr>
+        <td>TIMESTAMP</td><td>4B</td><td>1970-01-01 00:00:01至2038-01-19 03:14:07</td>
+    </tr>
+</table>
+<div class="note info flat"><ul>
+<li>存储年龄，使用<code>tinyint unsigned</code>，不能写<code>unsigned tinyint</code></li>
+<li>存分数，一位小数，存储钱数，可以使用<code>decimal(4,1)</code>，表示最多四位，小数在最后一位之前</li>
+<li><code>char(10)</code>定长为10，性能好，存储性别可以使用<code>char(1)</code></li>
+<li><code>varchar(10)</code>不定长，性能差一些</li>
+<li><code>timestamp</code>最大时间到2038，所以一般不用</li>
+<li>记录生日使用<code>date</code></li>
+</ul>
+</div>
+<h2 id="DML"><code>DML</code></h2>
+<h3 id="增-2">增</h3>
+<ul>
+<li>
+<p>给指定字段添加数据: <code>insert into 表名 (字段1, 字段2) values (值1, 值2);</code></p>
+</li>
+<li>
+<p>给所有字段添加数据: <code>insert into 表名 values (值1, 值2, ...);</code></p>
+</li>
+<li>
+<p>批量添加数据:</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> 表名 (字段<span class="number">1</span>, 字段<span class="number">2</span>) <span class="keyword">values</span> (值<span class="number">1</span>, 值<span class="number">2</span>), (值<span class="number">3</span>, 值<span class="number">4</span>), ...</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> 表名 <span class="keyword">values</span> (值<span class="number">1</span>, 值<span class="number">2</span>, 值<span class="number">3</span>, 值<span class="number">4</span>, ...), ... </span><br></pre></td></tr></table></figure>
+<ul>
+<li>插入数据为字符串或者日期类型，应使用引号，否则不会走索引</li>
+</ul>
+<h3 id="删-2">删</h3>
+<ul>
+<li>删除数据: <code>delete from 表名 [where 条件];</code></li>
+</ul>
+<h3 id="改-2">改</h3>
+<ul>
+<li>修改数据: <code>update 表名 set 字段1=值1, 字段2=值2,..., [where 条件];</code></li>
+</ul>
+<h2 id="DQL"><code>DQL</code></h2>
+<ul>
+<li>
+<p>查询语句: <code>select 字段列表 from 表名列表 [where 条件] [group by 分组字段列表] [having 分组后过滤条件列表] [order by 排序字段列表] [limit 分页参数];</code></p>
+</li>
+<li>
+<p>查询时可以设置别名: <code>select 字段1 as 别名1, 字段2 as 别名2;</code></p>
+</li>
+<li>
+<p>查询去重: <code>select distinct 字段列表 from 表名;</code></p>
+</li>
+<li>
+<p>条件查询:</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">比较运算符</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>&lt;&gt; or !=</code></td>
+<td style="text-align:center">不等于</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>BETWEEN...AND...</code></td>
+<td style="text-align:center">在某个范围内,包含边界。一定要写<code>between min and max</code> 写反了查不到值</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>IN(...)</code></td>
+<td style="text-align:center">在列表中多选一</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>LIKE</code></td>
+<td style="text-align:center">模糊匹配(<code>_</code>匹配单个字符, <code>%</code>匹配任意个字符)</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>IS NULL</code></td>
+<td style="text-align:center">为空</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>聚合函数 <code>count, max, min, avg, sum</code>:</p>
+<ul>
+<li>作用于某一列，所有<code>null</code>不参与聚合函数计算</li>
+<li><code>where</code>是分组之前过滤，在聚合函数之前执行，因此<strong>不能</strong>使用聚合函数；<code>having</code>是分组之后过滤，聚合函数在<code>having</code>之前已经执行了，因此<strong>可以</strong>使用聚合函数</li>
+<li>分组查询一般查询分组之后的字段和聚合函数，其他没有意义</li>
+</ul>
+</li>
+<li>
+<p>排序 <code>order by 字段1 排序方式1, 字段2 排序方式2</code>:</p>
+<ul>
+<li>升序<code>asc</code>，降序<code>desc</code>，默认为升序</li>
+</ul>
+</li>
+<li>
+<p>分页查询 <code>limit 起始索引, 查询记录数</code>:</p>
+<ul>
+<li>起始索引从0开始，起始索引 = (查询页码 - 1) * 每页记录个数</li>
+<li>分页查询是数据库的<strong>方言</strong>，不同数据库关键字不同，MySQL中使用<code>limit</code>，如果查询第一页的数据，则起始索引可以省略</li>
+</ul>
+</li>
+</ul>
+<h3 id="DQL执行顺序"><code>DQL</code>执行顺序:</h3>
+<ul>
+<li><code>from, where, group by, having, select, order by, limit</code></li>
+<li>首先执行<code>from</code>找到表名，然后执行<code>where</code>判断条件，再<code>group by</code>分组和<code>having</code>，再<code>select</code>选择字段列表，最后<code>order by</code>排序和<code>limit</code>分页</li>
+</ul>
+<h2 id="DCL"><code>DCL</code></h2>
+<h3 id="查-2">查</h3>
+<ul>
+<li>查询用户: <code>use mysql; select * from user;</code></li>
+</ul>
+<div class="note info flat"><p>用户信息都存放在<code>mysql</code>系统数据库中</p>
+</div>
+<ul>
+<li>查询用户权限: <code>show grants for '用户名'@'主机名';</code></li>
+</ul>
+<h3 id="增-3">增</h3>
+<ul>
+<li>创建用户: <code>create user '用户名'@'主机名' identified by '密码';</code></li>
+</ul>
+<div class="note info flat"><p>如果需要该用户可以在任意主机上访问该数据库，需要将主机名修改为<code>%</code>即可</p>
+</div>
+<h3 id="删-3">删</h3>
+<ul>
+<li>删除用户: <code>drop user '用户名'@'主机名';</code></li>
+</ul>
+<h3 id="改-3">改</h3>
+<ul>
+<li>
+<p>修改密码: <code>alter user '用户名'@'主机名' identified with mysql_native_password by '新密码';</code></p>
+</li>
+<li>
+<p>授权: <code>grant 权限列表 on 数据库名.表名 to '用户名'@'表名'</code>;</p>
+</li>
+<li>
+<p>撤销权限: <code>revoke 权限列表 on 数据库名.表名 from '用户名'@'表名';</code></p>
+</li>
+</ul>
+<div class="note info flat"><p><code>'用户名'@'表名'</code> 中间不能存在空格</p>
+</div>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">权限</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ALL, ALL PRIVILEGES</td>
+<td style="text-align:center">所有权限</td>
+</tr>
+<tr>
+<td style="text-align:center">SELECT</td>
+<td style="text-align:center">查询数据</td>
+</tr>
+<tr>
+<td style="text-align:center">INSERT</td>
+<td style="text-align:center">插入数据</td>
+</tr>
+<tr>
+<td style="text-align:center">UPDATE</td>
+<td style="text-align:center">修改数据</td>
+</tr>
+<tr>
+<td style="text-align:center">DELETE</td>
+<td style="text-align:center">删除数据</td>
+</tr>
+<tr>
+<td style="text-align:center">ALTER</td>
+<td style="text-align:center">修改表</td>
+</tr>
+<tr>
+<td style="text-align:center">DROP</td>
+<td style="text-align:center">删除数据库/表/视图</td>
+</tr>
+<tr>
+<td style="text-align:center">CREATE</td>
+<td style="text-align:center">创建数据库/表</td>
+</tr>
+</tbody>
+</table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io">Sangs</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io/posts/fae54f81.html">https://sangs3112.github.io/posts/fae54f81.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://sangs3112.github.io" target="_blank">Sangs</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/4a17b156.html" title="Hello World"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello World</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Sangs</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Sangs3112" target="_blank" title="Github"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-fill"></use></svg></a><a class="social-icon" href="mailto:Sangs3112@163.com" target="_blank" title="Email"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-002_youxiang"></use></svg></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">创建数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86%E9%80%89%E6%8B%A9-utf8mb4"><span class="toc-number">1.1.</span> <span class="toc-text">字符集选择: utf8mb4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F%E8%A7%84%E5%88%99%E9%80%89%E6%8B%A9%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">排序规则选择：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">SQL分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DDL"><span class="toc-number">2.1.</span> <span class="toc-text">DDL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5"><span class="toc-number">2.1.1.</span> <span class="toc-text">查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E"><span class="toc-number">2.1.2.</span> <span class="toc-text">增</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0"><span class="toc-number">2.1.3.</span> <span class="toc-text">删</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9"><span class="toc-number">2.1.4.</span> <span class="toc-text">改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.5.</span> <span class="toc-text">类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DML"><span class="toc-number">2.2.</span> <span class="toc-text">DML</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E-2"><span class="toc-number">2.2.1.</span> <span class="toc-text">增</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0-2"><span class="toc-number">2.2.2.</span> <span class="toc-text">删</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9-2"><span class="toc-number">2.2.3.</span> <span class="toc-text">改</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DQL"><span class="toc-number">2.3.</span> <span class="toc-text">DQL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DQL%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-number">2.3.1.</span> <span class="toc-text">DQL执行顺序:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DCL"><span class="toc-number">2.4.</span> <span class="toc-text">DCL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E-3"><span class="toc-number">2.4.2.</span> <span class="toc-text">增</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0-3"><span class="toc-number">2.4.3.</span> <span class="toc-text">删</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9-3"><span class="toc-number">2.4.4.</span> <span class="toc-text">改</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/4a17b156.html" title="Hello World">Hello World</a><time datetime="2024-03-11T10:35:53.074Z" title="发表于 2024-03-11 18:35:53">2024-03-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/fae54f81.html" title="MySQL笔记_0">MySQL笔记_0</a><time datetime="2024-03-10T07:05:56.000Z" title="发表于 2024-03-10 15:05:56">2024-03-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="Hexo" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/Sangs3112" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/ali_font.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>

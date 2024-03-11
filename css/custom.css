@@ -48,7 +48,7 @@
   .icon-zhongbiao::before {
     color: #f7c768;
   }
-  
+
   /* bilibli番剧插件 */
   #article-container .bangumi-tab.bangumi-active {
     background: var(--anzhiyu-theme);
@@ -99,23 +99,39 @@
   
   /* 首页文章卡片 */
   #recent-posts > .recent-post-item {
-    background: rgba(255, 255, 255, 0.7);
+    /* background: rgba(255, 255, 255, 0); */
+    background: rgba(28, 28, 28, 0.98) !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color:  rgba(169, 169, 169, 0.7);
   }
 
   /* 首页侧栏卡片 */
   #aside-content .card-widget {
-    background: rgba(255, 255, 255, 0.7);
+    /* background: rgba(255, 255, 255, 0); */
+    background: rgba(28, 28, 28, 0.98) !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color:  rgba(169, 169, 169, 0.7);
   }
 
   
   /* 文章页面正文背景 */
   div#post {
-    background: rgba(255, 255, 255, 0.9);
+    /* background: rgba(255, 255, 255, 0); */
+    background: rgba(28, 28, 28, 0.98) !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color:  rgba(169, 169, 169, 0.7);
   }
   
   /* 分页页面 */
   div#page {
-    background: rgba(255, 255, 255, 0.7);
+    /* background: rgba(255, 255, 255, 0); */
+    background: rgba(28, 28, 28, 0.98) !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color:  rgba(169, 169, 169, 0.7);
   }
 
   div.pagination{
@@ -125,17 +141,25 @@
   
   /* 归档页面 */
   div#archive {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0) !important;
   }
   
   /* 标签页面 */
   div#tag {
-    background: rgba(255, 255, 255, 0.7);
+    /* background: rgba(255, 255, 255, 0); */
+    background: rgba(28, 28, 28, 0.98) !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color:  rgba(169, 169, 169, 0.7);
   }
   
   /* 分类页面 */
   div#category {
-    background: rgba(255, 255, 255, 0.7);
+    /* background: rgba(255, 255, 255, 0); */
+    background: rgba(28, 28, 28, 0.98) !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color:  rgba(169, 169, 169, 0.7);
   }
   
   /*夜间模式伪类遮罩层透明*/
@@ -451,4 +475,20 @@
   /* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */
   .menus_items .menus_item:nth-child(2) .menus_item_child {
     left: -125px;
+  }
+
+/* 背景宇宙星光  */
+#universe{
+    display: block;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
   }
