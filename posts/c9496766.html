@@ -1,0 +1,574 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MySQL笔记_2 | Sangs Blog</title><meta name="author" content="Sangs"><meta name="copyright" content="Sangs"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="索引  高效获取数据的有序数据结构 提高检索效率，降低IO成本。 索引列对数据进行排序，降低排序成本，减少CPU的消耗 但是需要占用一些空间，提高查询效率有时候会降低更新表的速度，比如增删改。但是实际上增删改比例较少。      索引结构 描述 InnoDB MyISAM Memory     B+树索引 最常见的索引类型，大部分引擎都支持 支持 支持 支持   Hash索引 底层使用哈希表实现，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL笔记_2">
+<meta property="og:url" content="https://sangs3112.github.io/posts/c9496766.html">
+<meta property="og:site_name" content="Sangs Blog">
+<meta property="og:description" content="索引  高效获取数据的有序数据结构 提高检索效率，降低IO成本。 索引列对数据进行排序，降低排序成本，减少CPU的消耗 但是需要占用一些空间，提高查询效率有时候会降低更新表的速度，比如增删改。但是实际上增删改比例较少。      索引结构 描述 InnoDB MyISAM Memory     B+树索引 最常见的索引类型，大部分引擎都支持 支持 支持 支持   Hash索引 底层使用哈希表实现，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sangs3112.github.io/img/avatar.png">
+<meta property="article:published_time" content="2024-03-13T02:21:17.000Z">
+<meta property="article:modified_time" content="2024-03-13T07:15:25.593Z">
+<meta property="article:author" content="Sangs">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sangs3112.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sangs3112.github.io/posts/c9496766.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><meta name="google-site-verification" content="https://github.com/Sangs3112/Sangs3112.github.io/blob/master/googlea12c1ab75804fd8f.html"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySQL笔记_2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-13 15:15:25'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="referrer" content="no-referrer" /><!-- hexo injector head_end start --><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Sangs Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Sangs Blog"><span class="site-name">Sangs Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">MySQL笔记_2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-03-13T02:21:17.000Z" title="发表于 2024-03-13 10:21:17">2024-03-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-13T07:15:25.593Z" title="更新于 2024-03-13 15:15:25">2024-03-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1>索引</h1>
+<div class="note info flat"><ul>
+<li>高效获取数据的<strong>有序</strong>数据结构</li>
+<li>提高检索效率，降低IO成本。</li>
+<li>索引列对数据进行<strong>排序</strong>，降低排序成本，减少CPU的消耗</li>
+<li>但是需要占用一些空间，提高查询效率有时候会降低更新表的速度，比如增删改。但是实际上增删改比例较少。</li>
+</ul>
+</div>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">索引结构</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center"><code>InnoDB</code></th>
+<th style="text-align:center"><code>MyISAM</code></th>
+<th style="text-align:center"><code>Memory</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">B+树索引</td>
+<td style="text-align:center">最常见的索引类型，大部分引擎都支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">Hash索引</td>
+<td style="text-align:center">底层使用哈希表实现，只能精确匹配索引列的查询才有效，不支持范围查询</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">支持</td>
+</tr>
+<tr>
+<td style="text-align:center">R-tree(空间索引)</td>
+<td style="text-align:center">是<code>MyISAM</code>引擎的一个特殊索引类型，用于地理空间数据类型，使用较少</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:center">Full-text(全文索引)</td>
+<td style="text-align:center">通过建立倒排索引，快速匹配文档的方式，类似于<code>Lucene, Solr, ES</code></td>
+<td style="text-align:center">5.6版本后支持</td>
+<td style="text-align:center">支持</td>
+<td style="text-align:center">-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="B-树">B+树</h2>
+<ul>
+<li>
+<p>B+树的<strong>所有元素都在叶子节点处</strong>，非叶子节点只用于索引，存储都在叶子节点处，<strong>所有叶子节点形成了一个单向链表</strong>。<br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/sang3112/blog_imgs/raw/d97d1acffa4285fae00105cf631f50575b612f38/MySQL/B+tree.png" alt="B+tree"></p>
+</li>
+<li>
+<p><code>MySQL</code>对B+树进行优化，在原来的B+树基础上，增加了一个指向相邻叶子节点的链表指针，形成了带顺序指针的B+树，提高区间访问性能。<br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/sang3112/blog_imgs/raw/d97d1acffa4285fae00105cf631f50575b612f38/MySQL/MySQLB+tree.png" alt="MySQLB+tree"></p>
+</li>
+</ul>
+<h3 id="InnoDB为何使用B-树索引，没有选择哈希索引、二叉树或者红黑树索引？"><code>InnoDB</code>为何使用B+树索引，没有选择哈希索引、二叉树或者红黑树索引？</h3>
+<ol>
+<li>如果是二叉树，顺序插入最后会形成链表，搜索性能很低，红黑树可以解决</li>
+<li>但是红黑树本质上还是二叉树，<strong>自平衡二叉树</strong>，某些场景下层级太多了</li>
+<li>B+树相对于二叉树层级更少，搜索效率更高，这也是B树的优点</li>
+<li>但是B树无论叶子还是非叶子节点，都会保存数据，最终导致一页中存储的键值减少，指针也减少。如果要保存大量的数据，只能增加树的高度，导致性能降低。</li>
+<li>对于B+树，找什么都去叶子节点中，所以搜索效率稳定</li>
+<li><code>MySQL</code>中B+树的叶子节点形成了双向链表，便于范围搜索</li>
+<li>哈希索引<strong>不支持</strong>排序和范围匹配，只能等值匹配。</li>
+<li><code>InnoDB</code>也有自适应哈希功能，有的条件下会<strong>自动</strong>将B+树索引转换为哈希索引。(这点在后面会介绍)</li>
+</ol>
+<h2 id="索引分类">索引分类</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">分类</th>
+<th style="text-align:center">含义</th>
+<th style="text-align:center">特点</th>
+<th style="text-align:center">关键字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">主键索引</td>
+<td style="text-align:center">针对于表中主键创建的索引</td>
+<td style="text-align:center">默认自动创建，只能有一个</td>
+<td style="text-align:center"><code>PRIMARY</code></td>
+</tr>
+<tr>
+<td style="text-align:center">唯一索引</td>
+<td style="text-align:center">避免同表某数据列中的值重复</td>
+<td style="text-align:center">可以多个</td>
+<td style="text-align:center"><code>UNIQUE</code></td>
+</tr>
+<tr>
+<td style="text-align:center">常规索引</td>
+<td style="text-align:center">快速定位特定数据</td>
+<td style="text-align:center">可以多个</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">全文索引</td>
+<td style="text-align:center">查找文本中关键词，而不是比较索引值</td>
+<td style="text-align:center">可以多个</td>
+<td style="text-align:center"><code>FULLTEXT</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="按存储形式分类">按<strong>存储形式</strong>分类</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">分类</th>
+<th style="text-align:center">含义</th>
+<th style="text-align:center">特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">聚集索引</td>
+<td style="text-align:center">数据和索引放在一块，索引结构的叶子节点保存了行数据</td>
+<td style="text-align:center">必须有且只有一个</td>
+</tr>
+<tr>
+<td style="text-align:center">二级索引</td>
+<td style="text-align:center">将数据和索引分开存储，索引结构的叶子节点关联的是对应的主键</td>
+<td style="text-align:center">可以多个</td>
+</tr>
+</tbody>
+</table>
+<div class="note info flat"><ul>
+<li>如果存在主键，则主键索引就是聚集索引</li>
+<li>如果没有主键，则<strong>第一个</strong>唯一索引就是聚集索引</li>
+<li>没有主键索引和聚集索引的话，则<code>InnoDB</code>会自动生成一个<code>rowid</code>作为隐藏的聚集索引</li>
+</ul>
+</div>
+<div class="note info flat"><ul>
+<li>聚集索引下面挂的是一整行的数据，二级索引下面挂的是主键</li>
+<li>回表查询: 先走二级索引找到对应的主键，然后再从聚集索引找到需要的数据</li>
+</ul>
+</div>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id<span class="operator">=</span><span class="number">10</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> name<span class="operator">=</span>&quot;A&quot;;</span><br><span class="line"># 其中 id 为主键，name也有对应的索引</span><br><span class="line"># 前者性能更高，因为不需要回表查询了，可以直接通过聚集索引找到数据</span><br></pre></td></tr></table></figure>
+<h3 id="InnoDB主键索引中B-树高度为多少？"><code>InnoDB</code>主键索引中B+树高度为多少？</h3>
+<ol>
+<li>假设一行数据为1K，一页中存储16行，<code>InnoDB</code>指针占用6B，主键即使为<code>BIGINT</code>，占用8B</li>
+<li>如果树高为2，假设有n个键，就有n+1个指针，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>∗</mo><mn>8</mn><mo>+</mo><mo stretchy="false">(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>∗</mo><mn>6</mn><mo>=</mo><mn>16</mn><mo>∗</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">n * 8 + (n + 1) * 6 = 16 * 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4653em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">16</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span>计算得<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≈</mo><mn>1170</mn></mrow><annotation encoding="application/x-tex">n \approx 1170</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4831em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1170</span></span></span></span></li>
+<li>所以一个节点下面最多1171个指针，一个指针指向下面的子节点，一个子节点表示一个页，最多可以存16行数据。所以如果B+树高2，能够存储数据量为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1171</mn><mo>∗</mo><mn>16</mn><mo>=</mo><mn>18736</mn></mrow><annotation encoding="application/x-tex">1171 * 16 = 18736</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1171</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">16</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">18736</span></span></span></span></li>
+<li>如果树高为3，则<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1171</mn><mo>∗</mo><mn>1171</mn><mo>∗</mo><mn>16</mn><mo>=</mo><mn>21939856</mn></mrow><annotation encoding="application/x-tex">1171 * 1171 * 16 = 21939856</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1171</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1171</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">16</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">21939856</span></span></span></span>，所以即使存储两千多万条数据，树结构也只有三层</li>
+</ol>
+<h2 id="索引增删查">索引增删查</h2>
+<h3 id="创建索引">创建索引</h3>
+<p><code>create [unique | fulltext] index 索引名 on 表名 (索引关联字段1, 索引关联字段2, ...);</code></p>
+<div class="note info flat"><ul>
+<li>如果一个索引只关联了一个字段，则称为单列索引</li>
+<li>如果关联了多个字段，则称为联合索引</li>
+</ul>
+</div>
+<h3 id="删除索引">删除索引</h3>
+<p><code>drop index 索引名 on 表名;</code></p>
+<h3 id="查看索引">查看索引</h3>
+<p><code>show index from 表名;</code></p>
+<h2 id="性能分析">性能分析</h2>
+<h3 id="执行频率">执行频率</h3>
+<ul>
+<li><code>show [session | global] status;</code>查看服务器状态信息</li>
+<li><code>show global status like 'Com_______';</code>查看当前数据库的<code>insert, update, delete, select</code>的访问频次 (Com后面是7个下划线)</li>
+</ul>
+<h3 id="慢查询日志">慢查询日志</h3>
+<ul>
+<li>慢查询日志记录了所有执行时间超过指定参数(<code>long_query_time</code>单位: 秒，默认为10秒)的所有语句的日志</li>
+<li><code>show variables like 'slow_query_log';</code>查看慢查询日志是否开启，默认是关闭状态
+<ul>
+<li>需要在<code>/etc/my.cnf</code>中配置慢查询日志开关，表示超过200ms就是慢查询了<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slow_query_log=1</span><br><span class="line">long_query_time=0.2</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>慢查询日志存放在<code>var/log/mysql/mysql_slow.log</code></li>
+</ul>
+<h3 id="语句耗时">语句耗时</h3>
+<ul>
+<li><code>show profiles;</code>可以查看SQL语句耗时，<code>select @@have_profiling;</code>可以查看当前<code>MySQL</code>是否支持</li>
+<li>确认支持后，还需要查看是否开启了<code>select @@profiling;</code>使用<code>set @@profiling=1</code>开启</li>
+<li>开启后，执行完命令可以使用<code>show profiles;</code>查看一条指令的耗时情况</li>
+<li><code>show profile for query query_id</code>可以查看一条<code>query_id</code>的查询指令的耗时细节</li>
+<li><code>show profile cpu for query query_id</code>可以查看指定指令的CPU耗时细节</li>
+</ul>
+<h3 id="执行计划">执行计划</h3>
+<ul>
+<li>在任意<code>select</code>之前加上<code>explain</code>或者<code>desc</code>就可以查看执行计划
+<ul>
+<li><code>id</code>: <code>select</code>查询的序列号，表示执行顺序，<code>id</code>相同，从上到下执行；<code>id</code>不同，越大越早执行</li>
+<li><code>select_type</code>: 表示<code>select</code>类型，常见有:
+<ul>
+<li><code>simple</code>: 简单单表查询</li>
+<li><code>primary</code>: 最外层的主查询</li>
+<li><code>union</code>: 联合查询中的第二个查询</li>
+<li><code>subquery</code>: <code>select/where</code>后的子查询</li>
+</ul>
+</li>
+<li><code>type</code>: 表示连接类型，性能由好到差分别为<code>null, system, const, eq_ref, ref, range, index, all</code>
+<ul>
+<li><code>null</code>: 查询时不访问任何表，比如<code>select 'A';</code></li>
+<li><code>system</code>: 访问系统表</li>
+<li><code>const</code>: 根据主键、唯一索引访问</li>
+<li><code>ref</code>: 根据非唯一索引访问</li>
+<li><code>range</code>: 非唯一索引，但是范围匹配，比如<code>age &gt; 18</code></li>
+<li><code>index</code>: 虽然使用了索引，但是是所有的索引草庙，性能也低</li>
+<li><code>all</code>: 全表扫描，性能最低</li>
+</ul>
+</li>
+<li><code>extra</code>:
+<ul>
+<li><code>using index condition</code>: 查找使用了索引，但是<strong>需要回表</strong>查询</li>
+<li><code>using where; using index</code>: 查找使用了索引，但是需要的数据在索引列中都能找到，<strong>不需要回表</strong></li>
+</ul>
+</li>
+<li><code>possible_key</code>: 表示这表中可能用到的索引，一个或多个</li>
+<li><code>key</code>: 表示实际用到的索引，<code>null</code>表示没有用到索引</li>
+<li><code>key_len</code>: 表示索引中使用的字节数，是索引字段的最大长度，不是实际使用的长度，不损失精度的前提下越短越好</li>
+<li><code>rows</code>: 表示查询的行数，只是预估值，不是精确值</li>
+<li><code>filtered</code>: 表示查询返回行数占总读取行数的百分比，越大越好</li>
+</ul>
+</li>
+</ul>
+<h2 id="最左前缀法则"><strong>最左前缀法则</strong></h2>
+<ul>
+<li>如果有联合索引，查询从索引的最左列开始，不跳过中间的列。如果跳过某一列，则所有后面的字段都失效</li>
+<li>如果没有索引最左边的列，则索引失效</li>
+<li>只需要<code>where</code>条件有最左边的列即可，只要存在就行，跟在<code>where</code>中的位置无关</li>
+<li>联合索引中出现了范围查询<code>&gt;, &lt;</code>，则右边的索引失效
+<ul>
+<li><code>select * from user where profession='A' and age &gt; 30 and status='0';</code>则<code>stauts</code>失效</li>
+<li>如果是<code>&gt;=, &lt;=</code> 则不会产生影响，所以尽量少用<code>&gt;, &lt;</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="索引失效">索引失效</h2>
+<div class="note info flat"><ol>
+<li>
+<p>如果在索引列上进行运算，则索引失效</p>
+<ul>
+<li><code>select * from user where phone='12312312312';</code> 走单列索引，<code>type=const</code></li>
+<li><code>select * from user where substring(phone, 10, 2)='15';</code> 走全表扫描，<code>type=all</code></li>
+</ul>
+</li>
+<li>
+<p>字符串不加引号索引就会失效</p>
+<ul>
+<li><code>select * from user where phone=12312312312;</code> 走的是全表扫描，因为没有添加引号</li>
+</ul>
+</li>
+<li>
+<p>仅仅使用尾部模糊匹配，索引不会失效；只要有头部模糊匹配，索引会失效</p>
+<ul>
+<li><code>select * from user where profession like '软件%';</code> 走索引，<code>type=range</code></li>
+<li><code>select * from user where profession like '%软件';</code> 不走索引，<code>type=all</code></li>
+<li><strong>大数据量一定要规避模糊匹配前面加上%的情况</strong></li>
+</ul>
+</li>
+<li>
+<p>使用<code>or</code>分割的条件，只有两侧都有索引，索引才会生效，不然不会生效</p>
+</li>
+<li>
+<p>如果<code>MySQL</code>评估使用索引比全表扫描还要慢，就不会用索引</p>
+<ul>
+<li>比如范围匹配或者判断空或非空，满足要求的条件是表中的绝大部分数据，则不会使用索引，直接走全表扫描了</li>
+</ul>
+</li>
+</ol>
+</div>
+<h2 id="SQL提示"><code>SQL</code>提示</h2>
+<ul>
+<li>一个查询能满足多个索引的时候，<code>MySQL</code>会自动选择一个索引</li>
+<li>可以给<code>MySQL</code>提示，要求选择哪个索引进行查找，从而达到优化的目的</li>
+<li><code>use / ignore / force index;</code> 告诉<code>MySQL</code>使用哪个索引，不使用哪个索引</li>
+<li><code>use index</code>是一个建议，<code>MySQL</code>未必接受；<code>force index</code>是强制<code>MySQL</code>使用这个索引</li>
+</ul>
+<h3 id="如果MySQL取错索引，应该如何操作？">如果<code>MySQL</code>取错索引，应该如何操作？</h3>
+<ol>
+<li>使用<code>use / ignore / force index;</code> 让<code>MySQL</code>使用某个索引</li>
+<li>修改<code>SQL</code>语句，诱导<code>MySQL</code>选择某个索引</li>
+<li>建立合适的索引，删除无效的索引</li>
+</ol>
+<h2 id="覆盖索引">覆盖索引</h2>
+<ul>
+<li>尽量使用覆盖索引，而不用<code>select *</code></li>
+<li>覆盖索引就是查询使用了索引，并且查询的结果返回的列在该索引中能够全部找到，这样不需要回表</li>
+</ul>
+<h2 id="前缀索引">前缀索引</h2>
+<ul>
+<li>如果需要索引很长的字符串，可以使用前缀索引，或者使用<code>ES</code>实现</li>
+<li><code>create index idx_xxx on 表名(字段名(n));</code> 建立前缀索引，<code>n</code>表示要提取这个字段中的前<code>n</code>个字符构建索引</li>
+<li><code>n</code>是前缀长度，可以根据索引<strong>选择性</strong>决定，选择性是<strong>不重复的索引值</strong>(基数)与<strong>数据表的记录总数</strong>的比值。
+<ul>
+<li>选择性越高，查询效率越高</li>
+<li>唯一索引的选择性就是1，是最高的索引选择性，性能也是最好的<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="keyword">distinct</span> email) <span class="operator">/</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> <span class="keyword">user</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="keyword">distinct</span> <span class="built_in">substring</span>(email, <span class="number">1</span>, <span class="number">5</span>)) <span class="operator">/</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><strong>前缀索引不支持覆盖索引，所以一定会回表</strong></li>
+</ul>
+<h2 id="单列索引-VS-联合索引">单列索引 VS 联合索引</h2>
+<ol>
+<li>如果<code>where</code>有两个部分，分别都只有单列索引，这时候第一个条件会走单列索引，第二个条件不会走索引<br>
+<code>select id, phone, name from user where phone='12312312312' and name='123';</code> 此时只有<code>phone</code>走单列索引，<code>name</code>没有走索引，导致最终回表</li>
+<li>如果这时候有两个部分的单列索引，以及两个部分的联合索引，简单的使用<code>where</code>，依然是只有第一部分使用单列索引。因此需要指定使用联合索引才行</li>
+<li>如果涉及多个查询条件，推荐使用联合索引</li>
+</ol>
+<h2 id="索引设计原则">索引设计原则</h2>
+<ol>
+<li>数据量较大(&gt; 100万)，查询频繁的表需要涉及索引。如果只插入，不查询，就不用建立索引</li>
+<li>针对常常作为查询条件<code>where</code>，排序<code>order by</code>，分组<code>group by</code>这几个字段建立索引</li>
+<li>建立索引使用区分度高的列作为索引，尽量建立唯一索引。如果是性别，状态这种字段没有必要建立索引</li>
+<li>字符串较长考虑使用前缀索引</li>
+<li>尽量使用联合索引，减少单列索引，以达到使用覆盖索引，避免回表</li>
+<li>控制索引的数量，索引越多，增删改的效率越低</li>
+<li>索引列不能存储<code>NULL</code>，建表的时候使用<code>NOT NULL</code>约束，可以更有效的使用索引</li>
+</ol>
+<h2 id="例子">例子:</h2>
+<div class="note info flat"><p>索引命名规范: <code>idx_表名_字段名</code><br>
+创建联合索引对字段顺序有要求</p>
+</div>
+<ol>
+<li><code>name</code>是姓名字段，可能重复: <code>create index idx_user_name on user(name);</code> 创建常规索引</li>
+<li><code>phone</code>是手机号，非空，唯一，创建索引: <code>create unique index idx_user_phone on user(phone);</code> 创建唯一索引</li>
+<li>为<code>profession, age, status</code>创建索引: <code>create index idx_user_pro_age_status on user(profession, age, status);</code> 创建联合索引</li>
+<li>为<code>email</code>创建合适的索引: <code>create index idx_user_email on user(email);</code> 创建常规索引</li>
+<li>一张表四个字段<code>(id, username, password, status)</code>如何优化<code>select id, username, password from user where username='a';</code>:
+<ul>
+<li>建立<code>username, password</code>联合索引，并且<code>username</code>放在第一个，从而满足最左前缀法则，可以避免回表</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io">Sangs</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io/posts/c9496766.html">https://sangs3112.github.io/posts/c9496766.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://sangs3112.github.io" target="_blank">Sangs Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/posts/504036dc.html" title="MySQL笔记_1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">MySQL笔记_1</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Sangs</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Sangs3112" target="_blank" title="Github"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-fill"></use></svg></a><a class="social-icon" href="mailto:Sangs3112@163.com" target="_blank" title="Email"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-002_youxiang"></use></svg></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">索引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#B-%E6%A0%91"><span class="toc-number">1.1.</span> <span class="toc-text">B+树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB%E4%B8%BA%E4%BD%95%E4%BD%BF%E7%94%A8B-%E6%A0%91%E7%B4%A2%E5%BC%95%EF%BC%8C%E6%B2%A1%E6%9C%89%E9%80%89%E6%8B%A9%E5%93%88%E5%B8%8C%E7%B4%A2%E5%BC%95%E3%80%81%E4%BA%8C%E5%8F%89%E6%A0%91%E6%88%96%E8%80%85%E7%BA%A2%E9%BB%91%E6%A0%91%E7%B4%A2%E5%BC%95%EF%BC%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">InnoDB为何使用B+树索引，没有选择哈希索引、二叉树或者红黑树索引？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.</span> <span class="toc-text">索引分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E5%AD%98%E5%82%A8%E5%BD%A2%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.1.</span> <span class="toc-text">按存储形式分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95%E4%B8%ADB-%E6%A0%91%E9%AB%98%E5%BA%A6%E4%B8%BA%E5%A4%9A%E5%B0%91%EF%BC%9F"><span class="toc-number">1.2.2.</span> <span class="toc-text">InnoDB主键索引中B+树高度为多少？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%A2%9E%E5%88%A0%E6%9F%A5"><span class="toc-number">1.3.</span> <span class="toc-text">索引增删查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95"><span class="toc-number">1.3.1.</span> <span class="toc-text">创建索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%B4%A2%E5%BC%95"><span class="toc-number">1.3.2.</span> <span class="toc-text">删除索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%B4%A2%E5%BC%95"><span class="toc-number">1.3.3.</span> <span class="toc-text">查看索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">1.4.</span> <span class="toc-text">性能分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E9%A2%91%E7%8E%87"><span class="toc-number">1.4.1.</span> <span class="toc-text">执行频率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%85%A2%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97"><span class="toc-number">1.4.2.</span> <span class="toc-text">慢查询日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E5%8F%A5%E8%80%97%E6%97%B6"><span class="toc-number">1.4.3.</span> <span class="toc-text">语句耗时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92"><span class="toc-number">1.4.4.</span> <span class="toc-text">执行计划</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%B7%A6%E5%89%8D%E7%BC%80%E6%B3%95%E5%88%99"><span class="toc-number">1.5.</span> <span class="toc-text">最左前缀法则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88"><span class="toc-number">1.6.</span> <span class="toc-text">索引失效</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL%E6%8F%90%E7%A4%BA"><span class="toc-number">1.7.</span> <span class="toc-text">SQL提示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E6%9E%9CMySQL%E5%8F%96%E9%94%99%E7%B4%A2%E5%BC%95%EF%BC%8C%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E6%93%8D%E4%BD%9C%EF%BC%9F"><span class="toc-number">1.7.1.</span> <span class="toc-text">如果MySQL取错索引，应该如何操作？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95"><span class="toc-number">1.8.</span> <span class="toc-text">覆盖索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BC%80%E7%B4%A2%E5%BC%95"><span class="toc-number">1.9.</span> <span class="toc-text">前缀索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E5%88%97%E7%B4%A2%E5%BC%95-VS-%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95"><span class="toc-number">1.10.</span> <span class="toc-text">单列索引 VS 联合索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="toc-number">1.11.</span> <span class="toc-text">索引设计原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-number">1.12.</span> <span class="toc-text">例子:</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/c9496766.html" title="MySQL笔记_2">MySQL笔记_2</a><time datetime="2024-03-13T02:21:17.000Z" title="发表于 2024-03-13 10:21:17">2024-03-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/504036dc.html" title="MySQL笔记_1">MySQL笔记_1</a><time datetime="2024-03-11T16:15:13.000Z" title="发表于 2024-03-12 00:15:13">2024-03-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/fae54f81.html" title="MySQL笔记_0">MySQL笔记_0</a><time datetime="2024-03-10T07:05:56.000Z" title="发表于 2024-03-10 15:05:56">2024-03-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="Hexo" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/Sangs3112" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/ali_font.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
