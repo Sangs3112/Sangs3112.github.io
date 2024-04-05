@@ -1,0 +1,352 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Kafka笔记_1 | Sangs Blog</title><meta name="author" content="Sangs"><meta name="copyright" content="Sangs"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="消费  watermark水位线以下的数据是消费者可以消费的数据  消费者组中的消费者和分区之间的分配关系  同一个消费者组中的消费者都订阅同一个主题，所以消费者组中的多个消费者可以共同消费同一个主题中的所有数据 为了避免数据被重复消费，所以主题一个分区的数据只能被组中的一个消费者消费，所以两个消费者不能同时消费一个分区的数据。但是一个消费者可以同时消费多个分区的数据。  消费者分区分配策略(4种">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka笔记_1">
+<meta property="og:url" content="https://sangs3112.github.io/posts/afe3e258.html">
+<meta property="og:site_name" content="Sangs Blog">
+<meta property="og:description" content="消费  watermark水位线以下的数据是消费者可以消费的数据  消费者组中的消费者和分区之间的分配关系  同一个消费者组中的消费者都订阅同一个主题，所以消费者组中的多个消费者可以共同消费同一个主题中的所有数据 为了避免数据被重复消费，所以主题一个分区的数据只能被组中的一个消费者消费，所以两个消费者不能同时消费一个分区的数据。但是一个消费者可以同时消费多个分区的数据。  消费者分区分配策略(4种">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sangs3112.github.io/img/avatar.png">
+<meta property="article:published_time" content="2024-04-05T09:05:56.000Z">
+<meta property="article:modified_time" content="2024-04-05T09:37:30.082Z">
+<meta property="article:author" content="Sangs">
+<meta property="article:tag" content="Kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sangs3112.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sangs3112.github.io/posts/afe3e258.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><meta name="google-site-verification" content="https://github.com/Sangs3112/Sangs3112.github.io/blob/master/googlea12c1ab75804fd8f.html"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Kafka笔记_1',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-05 17:37:30'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="referrer" content="no-referrer" /><!-- hexo injector head_end start --><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Sangs Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Sangs Blog"><span class="site-name">Sangs Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Kafka笔记_1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-05T09:05:56.000Z" title="发表于 2024-04-05 17:05:56">2024-04-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-05T09:37:30.082Z" title="更新于 2024-04-05 17:37:30">2024-04-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Kafka/">Kafka</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1>消费</h1>
+<ul>
+<li><code>watermark</code>水位线以下的数据是消费者可以消费的数据</li>
+</ul>
+<h2 id="消费者组中的消费者和分区之间的分配关系">消费者组中的消费者和分区之间的分配关系</h2>
+<ol>
+<li>同一个消费者组中的消费者都订阅同一个主题，所以消费者组中的多个消费者可以共同消费同一个主题中的所有数据</li>
+<li>为了避免数据被重复消费，所以主题一个分区的数据只能被组中的一个消费者消费，所以两个消费者不能同时消费一个分区的数据。但是一个消费者可以同时消费多个分区的数据。</li>
+</ol>
+<h2 id="消费者分区分配策略-4种">消费者分区分配策略(4种)</h2>
+<div class="note default flat"><ul>
+<li>具体的分配策略实际上是由消费者组中的<code>Leader</code>决定的，<code>Leader</code>就是群主，是第一个加入消费者组的消费者。</li>
+<li>消费者加入群组时，发送一个<code>JoinGroup</code>，群主负责给每一个消费者分配一个分区。</li>
+</ul>
+</div>
+<h3 id="轮询分配策略-RoundRobinAssignor">轮询分配策略(<code>RoundRobinAssignor</code>)</h3>
+<ul>
+<li>每个消费者组中的消费者都含有一个自动生成的<code>UUID</code>作为<code>memberid</code></li>
+<li>轮询策略会将每个消费者按照<code>memberid</code>进行排序，所有<code>member</code>消费的主题分区根据主题名称进行排序</li>
+<li>将主题分区轮询分配给对应的订阅用户，未订阅当前轮询主题的消费者会跳过。<br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/sang3112/blog_imgs/raw/master/Kafka/RRA1.png" alt="RRA1"><br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/sang3112/blog_imgs/raw/master/Kafka/RRA2.png" alt="RRA2"><br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/sang3112/blog_imgs/raw/master/Kafka/RRA3.png" alt="RRA3"><br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/sang3112/blog_imgs/raw/master/Kafka/RRA4.png" alt="RRA4"></li>
+</ul>
+<h3 id="范围范围分配策略-RangeAssignor">范围范围分配策略(<code>RangeAssignor</code>)</h3>
+<ul>
+<li>每个<code>Topic</code>的<code>partition</code>数计算出每个消费者应该分配的分区数量，分配原则就是一个主题的分区尽可能平分，如果不能平均分配，则按照顺序向前补齐。</li>
+</ul>
+<div class="note default flat"><ul>
+<li>假设目前有五个分区分给两个消费者，<code>5 / 2 = 2, 5 % 2 = 1</code>。则剩下一个分区补在第一个消费者中，则分配结果为<code>[123][45]</code></li>
+<li>假设目前有五个分区分配给三个消费者，<code>5 / 3 = 1, 5 % 3 = 2</code>，最后分配结果是<code>[12][34][5]</code></li>
+<li>范围分配策略针对单个<code>Topic</code>的情况下比较均衡，如果多个<code>Topic</code>，则<code>member</code>靠前的排序可能比靠后的排序负载多很多，也不够理想</li>
+</ul>
+</div>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/sang3112/blog_imgs/raw/master/Kafka/RA1.png" alt="RA1"></p>
+<h3 id="粘性分区-StickyAssignor">粘性分区(<code>StickyAssignor</code>)</h3>
+<ul>
+<li>第一次分配后，每个组成员都保留分配给自己的分区信息。如果消费者加入或者退出，则进行分区再分配时(一般是消费者退出45s以后，才会进行再分配，因为又要考虑可能恢复的情况)，尽可能保证消费者原有分区不变，重新对加入或者退出消费者的分区进行分配。<br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/sang3112/blog_imgs/raw/master/Kafka/SA1.png" alt="SA1"><br>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://gitee.com/sang3112/blog_imgs/raw/master/Kafka/SA2.png" alt="SA2"></li>
+</ul>
+<h3 id="优化的粘性分配策略-CooperativeStickyAssignor">优化的粘性分配策略(<code>CooperativeStickyAssignor</code>)</h3>
+<ul>
+<li>前三种分配策略在进行重分配的时候使用的是<code>EAGER</code>协议，让当前的所有消费者放弃当前分区，关闭连接，资源清理，重新加入组和等待分配策略，效率较低。</li>
+<li>从2.4版本开始，粘性分配策略的基础上，优化了重分配的过程，使用的是<code>COOPERATIVE</code>协议。粘性分区分配策略分配的会更加均匀和高效一些。</li>
+<li><code>COOPERATIVE</code>协议将一次全局重平衡，改成每个小规模的重平衡，直到最终收敛平衡的过程。</li>
+</ul>
+<div class="note default flat"><ul>
+<li><code>Kafka</code>消费者默认的分区分配就是<code>RangeAssignor</code>(第一次分区分配)，<code>CooperativeStickyAssinor</code>(后续的分区分配)</li>
+</ul>
+</div>
+<h1>集群的脑裂问题</h1>
+<ul>
+<li>首先<code>ZooKeeper</code>具有三个<code>Broker</code>，其中有一个<code>Controller</code>，由<code>Broker1</code>创建的。</li>
+<li>但是此时网络不稳定，<code>Broker1</code>掉线了。<code>ZooKeeper</code>中的<code>Controller</code>临时节点被删除了，同时选举了<code>Broker3</code>作为新的<code>Controller</code>，创建了新的临时节点。</li>
+<li>此时<code>Broker1</code>恢复了链接，由于是<code>Broker3</code>创建了<code>Controller</code>。所以<code>Broker3</code>才是真正的管理者。</li>
+<li>但是<code>Broker1</code>此时仍然认为自己是管理者，两个<code>Broker</code>都会向<code>Broker2</code>同步消息，<code>Broker2</code>不知道应该同步谁的消息，这就是脑裂问题。</li>
+</ul>
+<h2 id="解决">解决</h2>
+<ul>
+<li><code>ZooKeeper</code>引入了<code>epoch</code>纪元，有一个<code>controller_epoch</code>(不是临时节点)，记录的是当前的<code>controller</code>是出现的第几个<code>controller</code>。这样<code>Broker2</code>就可以判断出最新的管理者是谁，从而完成同步消息。</li>
+</ul>
+<h1>总结</h1>
+<h2 id="Kafka组件">Kafka组件</h2>
+<ul>
+<li>通信用组件 <code>SocketServer</code>，<code>NetworkClient</code>，生产者中的缓冲区, <code>ZooKeeper</code>等等</li>
+</ul>
+<h2 id="LSO、LEO、HW含义"><code>LSO、LEO、HW</code>含义</h2>
+<ol>
+<li><code>LSO (Log Start Offset, Log Stable Offset)</code>
+<ul>
+<li>第一个是数据文件的起始偏移量，</li>
+<li>第二个表示的位移值是用来判断事务型消费者的可见性，就是事务的隔离级别。
+<ul>
+<li>一个是<code>read_committed</code>, 另一个是<code>read_uncommitted</code>，如果没有使用事务，则这个偏移量没有意义</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>LEO (Log End Offset)</code> 下一个要写入的数据偏移量，<strong>是不存在的</strong>。水位线靠这个推动增长</li>
+<li><code>HW</code> 高水位线的意思，是<code>Kafka</code>为了数据一致性增加的一种数据隔离方式，消费者只能消费到小于高水位线的数据</li>
+</ol>
+<h2 id="Controller选举如何实现。"><code>Controller</code>选举如何实现。</h2>
+<ul>
+<li><code>Kafka</code>在4.0版本以后，将会完全抛弃<code>ZooKeeper</code>，现在<code>Controller</code>选举还是依赖<code>ZooKeeper</code>实现的，所有的<code>Broker</code>都会监听<code>ZooKeeper</code>中的一个<code>Controller</code>临时节点。如果没有创建，则<code>Broker</code>会申请创建，创建成功，则该<code>Broker</code>就是集群的<code>Controller</code>。一旦失去和<code>ZooKeeper</code>的通信，临时节点就会消失，就会重新进行选举，并且<code>Controller纪元</code>就会更新</li>
+</ul>
+<h2 id="AR-ISR-OSR的含义"><code>AR ISR OSR</code>的含义</h2>
+<ol>
+<li><code>AR</code> 是分区的所有副本集合</li>
+<li><code>ISR</code> 是正在同步数据的副本列表，列表的第一个就是分区的<code>Leader</code>副本，其他就是<code>Follower</code>副本</li>
+<li><code>OSR</code> 就是没有处于同步数据的副本列表，一旦副本拉去数据满足了特定的条件。则<code>OSR</code>会移除并增加到<code>ISR</code>中。同样如果副本没有拉取数据满足特定的条件，就会从<code>ISR</code>中移除，放到<code>OSR</code>中。这些就是<code>ISR</code>列表的收缩和扩张，权衡数据的可靠性和性能之间的关系。</li>
+</ol>
+<h2 id="Producer消息重复或者消息丢失的原因"><code>Producer</code>消息重复或者消息丢失的原因</h2>
+<ul>
+<li>主要就是<code>Kafka</code>为了提高数据可靠性提供的重试机制，数据一旦发送失败了，数据就丢失了。</li>
+<li>数据重复，恰恰是因为开启重试机制以后，如果网络阻塞或者不稳定，导致数据需要重新发送，数据就有可能会重复。</li>
+<li>幂等性操作要求必须开启<strong>重试功能和<code>ACK = -1</code></strong>，这样可以确保数据不会丢失。
+<ul>
+<li><code>Kafka</code>提供幂等性操作只能保证同一个生产者会话中同一个分区中的数据不会重复，一旦数据发送过程中，生产者对象重启，幂等性操作失效，此时需要使用事务功能解决跨会话的幂等性操作，但是跨分区的幂等性操作是无法实现的。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Consumer消息重复或消息丢失的原因"><code>Consumer</code>消息重复或消息丢失的原因</h2>
+<ul>
+<li>是消费者提交偏移量的问题，消费者为了防止以外情况下，重启后不知道从哪里开始消费，会每5s自动保存偏移量，但是这种自动保存偏移量的操作是基于时间的，一旦未到达时间，消费者从起了，那么消费者可能重复消费数据。</li>
+<li><code>Kafka</code>提供自动保存偏移量的功能的同时，也提供了手动保存偏移量的两种方式，一个同步提交，另一个是异步提交。本质上都是提交一批数据的最后一个偏移的值，但是可能会出现，偏移量已经提交完毕了，但是拉取的数据还没有处理完毕，消费者重启了，此时有些数据就无法消费到，造成了数据丢失</li>
+</ul>
+<h2 id="Kafka数据如何保证有序"><code>Kafka</code>数据如何保证有序</h2>
+<ul>
+<li>有序需要考虑<strong>生产有序，存储有序和消费有序</strong>。</li>
+<li><strong>生产有序</strong> 就是生产者对象需要给数据增加序列号，用于标记数据的顺序，在服务端进行缓存数据的比对，一旦发现数据是乱序的，就需要让生产者客户端进行数据排序，然后重新发送数据，从而保证数据的有序。不过这里缓存的比对，最多只能有5条数据的比对，所以生产者客户端需要配置<strong>在途请求缓冲区的请求队列</strong>数据设置成5，否则数据依然可能乱序。因为服务端的缓存数据是以分区为单位的，所以需要生产者客户端将数据发送到一个分区中，如果数据发送到多个分区中，无法保证顺序，这就是生产有序的意思。</li>
+<li><strong>存储有序</strong> <code>Kafka</code>的服务端获取数据以后会将数据顺序写入日志文件，保证了存储有序，也只能保证一个分区的数据有序</li>
+<li><strong>消费有序</strong> <code>Kafka</code>在存储数据时会给数据增加一个访问的偏移量值，消费者只能按照偏移量的方式顺序访问，并且一个分区的数据只能被消费者组中的一个消费者消费，那么按照偏移量方式读取的数据就不会出现乱序的情况，从而实现消费有序。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io">Sangs</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io/posts/afe3e258.html">https://sangs3112.github.io/posts/afe3e258.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://sangs3112.github.io" target="_blank">Sangs Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Kafka/">Kafka</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/posts/d8e4d2ce.html" title="Kafka笔记_0"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Kafka笔记_0</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Sangs</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Sangs3112" target="_blank" title="Github"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-fill"></use></svg></a><a class="social-icon" href="mailto:Sangs3112@163.com" target="_blank" title="Email"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-002_youxiang"></use></svg></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">消费</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E4%B8%AD%E7%9A%84%E6%B6%88%E8%B4%B9%E8%80%85%E5%92%8C%E5%88%86%E5%8C%BA%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%86%E9%85%8D%E5%85%B3%E7%B3%BB"><span class="toc-number">1.1.</span> <span class="toc-text">消费者组中的消费者和分区之间的分配关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5-4%E7%A7%8D"><span class="toc-number">1.2.</span> <span class="toc-text">消费者分区分配策略(4种)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AE%E8%AF%A2%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5-RoundRobinAssignor"><span class="toc-number">1.2.1.</span> <span class="toc-text">轮询分配策略(RoundRobinAssignor)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%9B%B4%E8%8C%83%E5%9B%B4%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5-RangeAssignor"><span class="toc-number">1.2.2.</span> <span class="toc-text">范围范围分配策略(RangeAssignor)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B2%98%E6%80%A7%E5%88%86%E5%8C%BA-StickyAssignor"><span class="toc-number">1.2.3.</span> <span class="toc-text">粘性分区(StickyAssignor)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E7%9A%84%E7%B2%98%E6%80%A7%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5-CooperativeStickyAssignor"><span class="toc-number">1.2.4.</span> <span class="toc-text">优化的粘性分配策略(CooperativeStickyAssignor)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">集群的脑裂问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3"><span class="toc-number">2.1.</span> <span class="toc-text">解决</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Kafka%E7%BB%84%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">Kafka组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LSO%E3%80%81LEO%E3%80%81HW%E5%90%AB%E4%B9%89"><span class="toc-number">3.2.</span> <span class="toc-text">LSO、LEO、HW含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Controller%E9%80%89%E4%B8%BE%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E3%80%82"><span class="toc-number">3.3.</span> <span class="toc-text">Controller选举如何实现。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AR-ISR-OSR%E7%9A%84%E5%90%AB%E4%B9%89"><span class="toc-number">3.4.</span> <span class="toc-text">AR ISR OSR的含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Producer%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E6%88%96%E8%80%85%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">3.5.</span> <span class="toc-text">Producer消息重复或者消息丢失的原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Consumer%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E6%88%96%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-number">3.6.</span> <span class="toc-text">Consumer消息重复或消息丢失的原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kafka%E6%95%B0%E6%8D%AE%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%9C%89%E5%BA%8F"><span class="toc-number">3.7.</span> <span class="toc-text">Kafka数据如何保证有序</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/afe3e258.html" title="Kafka笔记_1">Kafka笔记_1</a><time datetime="2024-04-05T09:05:56.000Z" title="发表于 2024-04-05 17:05:56">2024-04-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/d8e4d2ce.html" title="Kafka笔记_0">Kafka笔记_0</a><time datetime="2024-04-04T07:05:56.000Z" title="发表于 2024-04-04 15:05:56">2024-04-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/46b5b207.html" title="Redis笔记_5">Redis笔记_5</a><time datetime="2024-03-25T11:51:15.000Z" title="发表于 2024-03-25 19:51:15">2024-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/31b28291.html" title="Redis笔记_4">Redis笔记_4</a><time datetime="2024-03-23T16:11:10.000Z" title="发表于 2024-03-24 00:11:10">2024-03-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/afd61732.html" title="Redis笔记_3">Redis笔记_3</a><time datetime="2024-03-23T00:16:45.000Z" title="发表于 2024-03-23 08:16:45">2024-03-23</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="Hexo" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/Sangs3112" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/ali_font.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
