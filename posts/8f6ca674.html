@@ -1,0 +1,330 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Go笔记_1 | Sangs Blog</title><meta name="author" content="Sangs"><meta name="copyright" content="Sangs"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="方法  Go语言中只有不同的package中可以有相同函数名的函数，尽管参数不同，但是如果函数名相同就不能出现在相同的包中(函数重载Go语言没有) 方法需要通过一个特定的实例调用，比如t.Errorf()，这里的Errorf就是一个方法，通过实例t调用 函数可以随便调用，没有限制   接口  接口让函数接受不同类型的参数并创造类型安全并且高解耦的代码 Go语言中 interface resolut">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go笔记_1">
+<meta property="og:url" content="https://sangs3112.github.io/posts/8f6ca674.html">
+<meta property="og:site_name" content="Sangs Blog">
+<meta property="og:description" content="方法  Go语言中只有不同的package中可以有相同函数名的函数，尽管参数不同，但是如果函数名相同就不能出现在相同的包中(函数重载Go语言没有) 方法需要通过一个特定的实例调用，比如t.Errorf()，这里的Errorf就是一个方法，通过实例t调用 函数可以随便调用，没有限制   接口  接口让函数接受不同类型的参数并创造类型安全并且高解耦的代码 Go语言中 interface resolut">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sangs3112.github.io/img/avatar.png">
+<meta property="article:published_time" content="2024-04-20T07:54:49.450Z">
+<meta property="article:modified_time" content="2024-04-20T07:54:49.450Z">
+<meta property="article:author" content="Sangs">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sangs3112.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sangs3112.github.io/posts/8f6ca674.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><meta name="google-site-verification" content="https://github.com/Sangs3112/Sangs3112.github.io/blob/master/googlea12c1ab75804fd8f.html"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Go笔记_1',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-20 15:54:49'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="referrer" content="no-referrer" /><!-- hexo injector head_end start --><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Sangs Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Sangs Blog"><span class="site-name">Sangs Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Go笔记_1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-20T07:54:49.450Z" title="发表于 2024-04-20 15:54:49">2024-04-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-20T07:54:49.450Z" title="更新于 2024-04-20 15:54:49">2024-04-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Go/">Go</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1>方法</h1>
+<div class="note info flat"><ul>
+<li>Go语言中只有不同的<code>package</code>中可以有相同函数名的函数，尽管参数不同，但是如果函数名相同就不能出现在相同的包中(函数重载Go语言没有)</li>
+<li>方法需要通过一个特定的实例调用，比如<code>t.Errorf()</code>，这里的<code>Errorf</code>就是一个方法，通过实例<code>t</code>调用</li>
+<li>函数可以随便调用，没有限制</li>
+</ul>
+</div>
+<h1>接口</h1>
+<ul>
+<li>接口让函数接受不同类型的参数并创造类型安全并且高解耦的代码</li>
+<li>Go语言中 interface resolution 是隐式的。如果传入的类型匹配接口需要的，则编译正确。</li>
+<li>函数实现因此不需要关心参数是什么类型的，只需要声明一个接口，辅助函数就可以从具体类型解耦而只关心本身需要做的工作</li>
+</ul>
+<h1>表格驱动测试</h1>
+<ul>
+<li>如果需要测试一个接口的不同实现，或者传入的数据有很多不同的测试需求，则可以使用表格驱动测试</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestArea</span><span class="params">(t *testing.T)</span></span>&#123;</span><br><span class="line">	areaTests := []<span class="keyword">struct</span>&#123;</span><br><span class="line">		name <span class="type">string</span></span><br><span class="line">		shape Shape</span><br><span class="line">		want <span class="type">float64</span></span><br><span class="line">	&#125;&#123;</span><br><span class="line">		&#123;name: <span class="string">&quot;Rec&quot;</span>, shape: Rec&#123;Width: <span class="number">12</span>, Height: <span class="number">6</span>&#125;, want: <span class="number">72.0</span>&#125;,</span><br><span class="line">		&#123;name: <span class="string">&quot;Circle&quot;</span>, shape: Circle&#123;<span class="number">10</span>&#125;, want: <span class="number">314.15926</span>&#125;,</span><br><span class="line">		&#123;name: <span class="string">&quot;Tri&quot;</span>, shape: Tri&#123;<span class="number">12</span>, <span class="number">6</span>&#125;, want: <span class="number">361.0</span>&#125;, </span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> _, tt := <span class="keyword">range</span> areaTests&#123;</span><br><span class="line">		got := tt.shape.Area()</span><br><span class="line">		want := tt.want</span><br><span class="line">		<span class="keyword">if</span> got != want&#123;</span><br><span class="line">			t.Errorf(<span class="string">&quot;%#v got &#x27;%.2f&#x27;, want &#x27;%.2f&#x27;&quot;</span>, tt.shape, got, want)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="note info flat"><ul>
+<li>创建了一个匿名结构体，里面有shape和want，放在一个[]struct切片中</li>
+<li>然后使用两个测试用例填充这个切片</li>
+<li>Go中调用一个函数或者方法的时候，参数会被复制</li>
+<li>使用指针解决这个问题，指向某个值，然后修改</li>
+</ul>
+</div>
+<h1>map</h1>
+<ul>
+<li>Map是引用类型的，拥有对底层数据结构的引用</li>
+<li>因此，Map可以是nil指，如果使用一个nil的map，那么会得到一个nil指针异常，导致程序终止</li>
+<li>永远不要初始化一个空的map变量，比如:<code>var m map[string]string</code></li>
+<li>可以用如下两种方式初始化空的map:</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dict = <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span>&#123;&#125;</span><br><span class="line">dict = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>上述两种方法绝对不会出现nil指针异常</li>
+</ul>
+<h1>依赖注入</h1>
+<ul>
+<li><code>fmt.Fprintf</code>接受一个<code>Writer</code>参数，将字符串传递过去。</li>
+<li><code>fmt.Printf</code>是标准的默认输出</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// di.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;io&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Greet</span><span class="params">(writer io.Writer, name <span class="type">string</span>)</span></span> &#123;</span><br><span class="line">	<span class="comment">// fmt.Printf(&quot;Hello, %s&quot;, name)</span></span><br><span class="line">	fmt.Fprintf(writer, <span class="string">&quot;Hello, %s&quot;</span>, name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Greet(os.Stdout, <span class="string">&quot;Elodie&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// di_test.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestGreet</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	buffer := bytes.Buffer&#123;&#125; <span class="comment">// 注入依赖</span></span><br><span class="line">	Greet(&amp;buffer, <span class="string">&quot;Chris&quot;</span>)</span><br><span class="line">	got := buffer.String()</span><br><span class="line">	want := <span class="string">&quot;Hello, Chris&quot;</span></span><br><span class="line">	<span class="keyword">if</span> got != want &#123;</span><br><span class="line">		t.Errorf(<span class="string">&quot;got %s want %s&quot;</span>, got, want)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="note info flat"><ul>
+<li>Go中可以使用反引号创建字符串，允许将字符串中的东西放在新的一行，比如<br>
+`<br>
+3<br>
+1<br>
+2<br>
+`</li>
+</ul>
+</div>
+<ul>
+<li>
+<p>Go中不会阻塞的操作在成为goroutine的单独进程中运行。使用go关键字声明</p>
+</li>
+<li>
+<p><code>go test -race</code>可以发现<code>goroutine</code>中的竞争条件，比如可能多个进程同时写一个<code>map</code>，但是一次执行并不会触发这种现象。</p>
+</li>
+<li>
+<p>可以通过<code>channels</code>协调<code>goroutine</code>解决数据竞争问题。</p>
+</li>
+<li>
+<p>比如原本需要将多个进程的数据写入<code>map</code>中，现在可以使用<code>channel &lt;- data</code>，将数据发送到<code>channel</code>中，然后再使用<code>for</code>循环，将数据保存保存在新的map中，这样不会产生数据竞争的问题。<code>result := &lt;- channel</code></p>
+</li>
+<li>
+<p>在函数调用之前加上<code>defer</code>前缀会在包含他的函数结束时调用它。</p>
+<ul>
+<li>有时候需要清理资源，比如在函数结束时关闭一个文件，或者关闭一个服务器，但是要把它放在创建服务器语句附近，以便函数内后面的代码仍然可以使用这个服务器，就可以使用<code>defer</code>，等到函数执行完再调用</li>
+</ul>
+</li>
+</ul>
+<h1>进程同步</h1>
+<ul>
+<li><code>select</code>可以轻易实现进程同步</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Racer</span> <span class="params">(a, b <span class="type">string</span>)</span></span> (winner <span class="type">string</span>, err <span class="type">error</span>)&#123;</span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> &lt;- ping(a):</span><br><span class="line">			<span class="keyword">return</span> a, <span class="literal">nil</span></span><br><span class="line">		<span class="keyword">case</span> &lt;- ping(b):</span><br><span class="line">			<span class="keyword">return</span> b, <span class="literal">nil</span></span><br><span class="line">		<span class="keyword">case</span> M- time.After(<span class="number">10</span> *time.Second):</span><br><span class="line">			<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, fmt.Errorf(<span class="string">&quot;timed out waiting for %s and %s&quot;</span>, a, b)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ping</span><span class="params">(url <span class="type">string</span>)</span></span> <span class="keyword">chan</span> <span class="type">bool</span>&#123;</span><br><span class="line">	ch := <span class="built_in">make</span> (<span class="keyword">chan</span> <span class="type">bool</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">		http.Get(url)</span><br><span class="line">		ch &lt;- <span class="literal">true</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> ch</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果是<code>v := &lt;- ch</code>等待值发送给<code>channel</code>，则这是一个阻塞调用，因为需要等待值返回</li>
+<li><code>select</code>允许多个<code>channel</code>等待，第一个发送值的<code>channel</code>胜出。</li>
+<li>使用<code>select</code>时，<code>time.After</code>是一个很好用的函数，因为<code>channel</code>可能永远不会返回一个值，那就有可能不会返回，因此使用<code>time.After</code>设置超时时间</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">t.Run(<span class="string">&quot;returns an error if a server doesn&#x27;t respond within 10s&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    serverA := makeDelayedServer(<span class="number">11</span> * time.Second)</span><br><span class="line">    serverB := makeDelayedServer(<span class="number">12</span> * time.Second)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">defer</span> serverA.Close()</span><br><span class="line">    <span class="keyword">defer</span> serverB.Close()</span><br><span class="line"></span><br><span class="line">    _, err := Racer(serverA.URL, serverB.URL)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">        t.Error(<span class="string">&quot;expected an error but didn&#x27;t get one&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h1>反射</h1>
+<blockquote>
+<p>编写函数 <code>walk(x interface&#123;&#125;, fn func(string))</code>，参数为结构体x，并对 x 中的所有字符串字段调用 fn 函数</p>
+</blockquote>
+<ul>
+<li>反射提供了程序检查自身结构体的能力。</li>
+<li>允许使用类型<code>interface&#123;&#125;</code>，代表任意类型。但是这样市区了对类型安全的检查，编译器不会再检查类型</li>
+<li>除非真的需要，否则不要使用反射</li>
+<li>如果想要实现多态，可以考虑围绕接口实现。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io">Sangs</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io/posts/8f6ca674.html">https://sangs3112.github.io/posts/8f6ca674.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://sangs3112.github.io" target="_blank">Sangs Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Go/">Go</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/posts/f86b96e2.html" title="Go笔记_0"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Go笔记_0</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Sangs</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Sangs3112" target="_blank" title="Github"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-fill"></use></svg></a><a class="social-icon" href="mailto:Sangs3112@163.com" target="_blank" title="Email"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-002_youxiang"></use></svg></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">接口</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">表格驱动测试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">map</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">依赖注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">进程同步</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">反射</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/8f6ca674.html" title="Go笔记_1">Go笔记_1</a><time datetime="2024-04-20T07:54:49.450Z" title="发表于 2024-04-20 15:54:49">2024-04-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/f86b96e2.html" title="Go笔记_0">Go笔记_0</a><time datetime="2024-04-20T07:54:49.446Z" title="发表于 2024-04-20 15:54:49">2024-04-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/13ce2c90.html" title="Java笔记_1">Java笔记_1</a><time datetime="2024-04-19T06:37:35.000Z" title="发表于 2024-04-19 14:37:35">2024-04-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/64c91c06.html" title="Java笔记_0">Java笔记_0</a><time datetime="2024-04-18T06:37:35.000Z" title="发表于 2024-04-18 14:37:35">2024-04-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/64a0ba43.html" title="Kubernetes笔记_0">Kubernetes笔记_0</a><time datetime="2024-04-05T12:25:31.000Z" title="发表于 2024-04-05 20:25:31">2024-04-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="Hexo" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/Sangs3112" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/ali_font.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
