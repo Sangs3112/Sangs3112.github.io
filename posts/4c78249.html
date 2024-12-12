@@ -1,0 +1,382 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java笔记_10 | Sangs Blog</title><meta name="author" content="Sangs"><meta name="copyright" content="Sangs"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="异常  所有的异常都是由Throwable继承而来, 下一层有两个分支, Error和Exception  Error类描述了Java运行时系统的内部错误和资源耗尽问题, 一般不要抛出这个类型 Exception层次分为两个分支, RuntimeException和其他异常  编程错误导致的是RuntimeException 由于IO错误导致的是其他异常 继承自RuntimeException异常">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java笔记_10">
+<meta property="og:url" content="https://sangs3112.github.io/posts/4c78249.html">
+<meta property="og:site_name" content="Sangs Blog">
+<meta property="og:description" content="异常  所有的异常都是由Throwable继承而来, 下一层有两个分支, Error和Exception  Error类描述了Java运行时系统的内部错误和资源耗尽问题, 一般不要抛出这个类型 Exception层次分为两个分支, RuntimeException和其他异常  编程错误导致的是RuntimeException 由于IO错误导致的是其他异常 继承自RuntimeException异常">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sangs3112.github.io/img/avatar.png">
+<meta property="article:published_time" content="2024-12-12T01:18:00.000Z">
+<meta property="article:modified_time" content="2024-12-12T09:17:11.140Z">
+<meta property="article:author" content="Sangs">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Java核心技术(卷一)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sangs3112.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://sangs3112.github.io/posts/4c78249.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><meta name="google-site-verification" content="https://github.com/Sangs3112/Sangs3112.github.io/blob/master/googlea12c1ab75804fd8f.html"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java笔记_10',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-12-12 17:17:11'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="referrer" content="no-referrer" /><!-- hexo injector head_end start --><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Sangs Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Sangs Blog"><span class="site-name">Sangs Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Java笔记_10</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-12T01:18:00.000Z" title="发表于 2024-12-12 09:18:00">2024-12-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-12T09:17:11.140Z" title="更新于 2024-12-12 17:17:11">2024-12-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1>异常</h1>
+<ul>
+<li>所有的异常都是由<code>Throwable</code>继承而来, 下一层有两个分支, <code>Error</code>和<code>Exception</code>
+<ul>
+<li><code>Error</code>类描述了<code>Java</code>运行时系统的内部错误和资源耗尽问题, 一般不要抛出这个类型</li>
+<li><code>Exception</code>层次分为两个分支, <code>RuntimeException</code>和其他异常
+<ul>
+<li>编程错误导致的是<code>RuntimeException</code></li>
+<li>由于<code>IO</code>错误导致的是其他异常</li>
+<li>继承自<code>RuntimeException</code>异常包括: 错误的强制类型转换; 数组越界; 访问<code>null</code>指针</li>
+<li>不继承自<code>RuntimeException</code>异常包括: 打开不存在的文件; 越过文件末尾读取数据; 根据给定字符串查找<code>Class</code>, 但是这个类并不存在</li>
+</ul>
+</li>
+<li>所有派生于<code>Error</code>和<code>RuntimeException</code>的异常是非检查型异常, 其他异常都是检查型异常</li>
+</ul>
+</li>
+</ul>
+<h2 id="抛出异常的情况">抛出异常的情况</h2>
+<ol>
+<li>调用了某个会抛出异常的方法, 比如<code>FileInputStream</code>构造器</li>
+<li>检测到一个错误, 使用<code>throw</code>语句抛出异常</li>
+<li>程序出现错误, 比如<code>a[-1]</code>抛出一个非检查型异常</li>
+<li><code>JVM</code>内部错误</li>
+</ol>
+<ul>
+<li>一个方法必须声明所有可能抛出的检查型异常, 也可以捕获一个异常, 这样也不需要抛出了</li>
+<li>如果子类覆盖了超类的一个方法, 子类抛出的异常不能比超类的更通用, 如果超类没有抛出异常, 则子类也不能抛出异常</li>
+</ul>
+<h2 id="创建异常">创建异常</h2>
+<ul>
+<li>定义一个派生于<code>Exception</code>或者他子类的一个类, 包含两个构造器, 一个是无参构造器, 另一个是包含详细信息的构造器  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FileFormatException</span> <span class="keyword">extends</span> <span class="title class_">IOException</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">FileFormatException</span><span class="params">()</span>&#123;&#125;;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">FileFormatException</span><span class="params">(String gripe)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(gripe);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="捕获异常">捕获异常</h2>
+<ul>
+<li>如果<code>try</code>语句块中任何代码抛出了<code>catch</code>指定的一个异常类
+<ol>
+<li>跳过<code>try</code>语句块剩余执行内容</li>
+<li>执行<code>catch</code>语句块代码</li>
+</ol>
+</li>
+<li>如果没有抛出异常, 则直接跳过<code>catch</code>部分</li>
+<li>如果抛出了异常, 但是不在<code>catch</code>中, 则方法会直接退出</li>
+<li>一般是捕获知道如何处理的异常, 抛出不知道如何处理的异常</li>
+<li>一个<code>try</code>语句块可能抛出多种不同的异常, 每个异常需要一个<code>catch</code>语句块
+<ul>
+<li>如果两个异常的捕获动作一样的话, 可以使用<code>catch(Exception e1 | Exception e2)</code>合并</li>
+<li>捕获多个变量时, 异常变量银行了<code>final</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="再次抛出">再次抛出</h2>
+<ul>
+<li>有时候只想记录一个异常, 再次抛出  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    logger.log(level, message, e);</span><br><span class="line">    <span class="keyword">throw</span> e;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 如果这段代码存在于 public void update() throws SQLException中</span></span><br><span class="line"><span class="comment">// 在Java 7之前会报错, 因为 throw e可能抛出其他类型的异常, 而不是SQLException</span></span><br><span class="line"><span class="comment">// 现在改变了, 编译器会跟踪到e来自try代码块, try代码块中仅有的检查型异常是SQLException实例, 并且</span></span><br><span class="line"><span class="comment">// e在catch块中没有改变, 那么外围方法声明为throws SQLException就是合法的</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="finally子句"><code>finally</code>子句</h2>
+<ul>
+<li>
+<p>代码抛出异常, 剩下的代码就不会运行, 如果这时候已经获取到了一些资源, 在退出之前需要释放.</p>
+<ul>
+<li>可以先捕获所有异常, 然后释放资源, 再重新抛出异常</li>
+<li>也可以使用<code>finally</code>子句, 无论是否抛出异常, <code>finally</code>子句部分一定都会执行</li>
+<li><code>Java 7</code>之后可以使用<code>try-with-resources</code>, 这个更常用</li>
+</ul>
+</li>
+<li>
+<p><code>try</code>语句可以只有<code>finally</code>, 没有<code>catch</code></p>
+</li>
+<li>
+<p><code>finally</code>语句中不要放<code>throw, continue, break, return</code>这种改变程序执行顺序的语句</p>
+</li>
+</ul>
+<h2 id="try-with-resources"><code>try-with-resources</code></h2>
+<ul>
+<li><code>AutoCloseable</code>接口有一个方法 <code>void close() throwa Exception</code></li>
+<li><code>Closeable</code>接口是<code>AutoCloseable</code>接口的子接口, 同样只包含<code>close()</code>, 但是抛出的是<code>IOException</code></li>
+<li><code>try-with-resources</code>语句的最简单形式是:  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> (<span class="type">Resources</span> <span class="variable">res</span> <span class="operator">=</span> ...) &#123;</span><br><span class="line">    work with res</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里try块退出时, 会自动调用res.close()</span></span><br><span class="line"><span class="keyword">try</span> (<span class="type">var</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(Path.of(<span class="string">&quot;1.txt&quot;</span>), StandardCharsets.UTF_8);</span><br><span class="line">    <span class="type">var</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(<span class="string">&quot;2.txt&quot;</span>, StandardCharsets.UTF_8)) &#123;</span><br><span class="line">    <span class="keyword">while</span> (in.hasNext()) &#123;</span><br><span class="line">        out.println(in.next().toUpperCase());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 上述代码不论是如何退出的, 都一定会自动关闭in和out</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>如果是<code>try-catch-finally</code>语句, 在<code>try</code>中抛出了异常, 然后<code>finally</code>调用<code>in.close()</code>又抛出了异常就会产生问题
+<ul>
+<li>此时使用<code>try-with-resources</code>就可以解决这个问题</li>
+<li>原来的异常会重新抛出, <code>close()</code>产生的异常会被抑制, 自动捕获, 由<code>addSuppressed()</code> 添加到原来的异常方法中</li>
+<li>可以调用<code>getSuppressed()</code>, 会生成一个数组, 包含其中从<code>close()</code>方法中抛出的被抑制的异常</li>
+</ul>
+</li>
+<li><code>try-with-resources</code>语句本身可以有<code>catch, finally</code>语句, 这些子句会在关闭资源以后才执行</li>
+</ul>
+<h2 id="栈轨迹">栈轨迹</h2>
+<ul>
+<li>栈轨迹是程序执行中某个特定点所有挂起的方法调用的一个列表</li>
+<li><code>Throwable</code>类的<code>printStackTrace()</code>可以打印  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">var</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Throwable</span>();</span><br><span class="line"><span class="type">var</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringWriter</span>();</span><br><span class="line">t.printStackTrace(<span class="keyword">new</span> <span class="title class_">PrintWriter</span>(out));</span><br><span class="line"><span class="type">String</span> <span class="variable">des</span> <span class="operator">=</span> out.toString();</span><br><span class="line"><span class="comment">// Java 9之前, Throwable.printStackTrace()会生成一个StackTraceElement[]</span></span><br><span class="line"><span class="comment">// 数组中包含了和StackWalker.StackFrame类似的信息, 效率较低</span></span><br><span class="line"><span class="comment">// 因为会得到整个栈, 但是调用者只需要几个栈帧, 并且只允许访问挂起方法的类名, 不能访问类对象</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>还可以使用<code>StackWalker</code>类, 生成一个<code>StackWalker.StackFrame</code>实例流, 其中每个实例表示一个栈帧  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">StackWalker</span> <span class="variable">walker</span> <span class="operator">=</span> StackWalker.getInstance();</span><br><span class="line">walker.forEach(frame -&gt; ananlyze frame)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<div class="note info flat"><ul>
+<li>栈轨迹一般显示在<code>System.err</code>上, 如果想要记录栈轨迹, 可以捕获到字符串中</li>
+<li>也可以记录到文件中, 不过如果是错误的话, 就会发送到<code>System.err</code>中, 所以就不能使用下面的代码
+<ul>
+<li><code>java MyApp &gt; errors.txt</code>, 而是应该使用 <code>java MyApp 2&gt; errors.txt</code></li>
+<li>如果需要在同一个文件中同时保存<code>System.out, System.err</code>可以使用如下代码</li>
+<li><code>java MyApp 1&gt; errors.txt 2&gt;&amp;1</code></li>
+</ul>
+</li>
+<li>可以使用静态方法<code>Thread.setDefaultUncaughtExceptionHandler</code>改变没有捕获异常的处理器</li>
+<li>启动<code>JVM</code>可以使用<code>-verbose</code>看到类加载器加载过程</li>
+<li><code>Xlint</code>选项可以告诉编译器找出常见的代码问题, 比如<code>javac -Xlint sourceFiles</code></li>
+<li><code>JDK</code>提供了<code>jconsole</code>可以显示<code>JVM</code>性能统计结果</li>
+</ul>
+</div>
+<h2 id="使用异常技巧">使用异常技巧</h2>
+<ol>
+<li>异常不能代替简单测试, 使用捕获异常会导致程序耗时大大增加, 因此只在异常情况下使用异常</li>
+<li>不要过分细化异常, 否则一个异常一个<code>catch</code>会导致代码量激增</li>
+<li>合理使用异常层次
+<ul>
+<li>不要只抛出<code>RuntimeException</code>, 应该需要寻找一个合适的子类, 或者创建自己的异常类</li>
+<li>不要只捕获<code>Throwable</code>异常, 否则代码会很难读懂</li>
+<li>考虑检查型异常和非检查型异常, 检查型异常本质上开销较大</li>
+</ul>
+</li>
+<li>不要压制异常, 可以使用</li>
+<li>使用标准方法报告<code>null</code>指针和越界异常</li>
+<li>不要向用户展示最终的栈轨迹</li>
+</ol>
+<h1>断言</h1>
+<ul>
+<li>断言允许在测试期间在代码中插入一些检查, 在生产代码中自动删除这些  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> condition;</span><br><span class="line"><span class="keyword">assert</span> condition : expression;</span><br><span class="line"><span class="comment">// 两个写法都会计算condition, 如果为false, 会抛出AssertionError异常</span></span><br><span class="line"><span class="comment">// 第二个语句会将expression传入到AssertionError构造器中, 转换为一个消息字符串</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>默认情况下禁用断言, 运行是使用<code>java -enableassertions MyApp</code> 或者<code>java -ea MyApp</code>启用</li>
+<li>不需要重新编译启用断言, 因为断言是类加载器的功能, 禁用断言的时候类加载器会自动删去断言的代码, 不会降低速度</li>
+<li>可以在特定的类或整个包中打开断言<code>java -ea:MyClass -ea:com.mycompany.mylib MyApp</code>
+<ul>
+<li>这样会在<code>MyClass</code>类, <code>com.mycompany.mylib</code>包及其子包中的所有类打开断言</li>
+<li>同样可以使用<code>-da</code> 或者<code>-disableassertions</code>禁用断言</li>
+<li><code>-ea</code>和<code>-da</code>不能应用于没有类加载器的系统类, 需要使用<code>-esa</code>或者<code>enablesystemassertions</code>开启系统类断言</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io">Sangs</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io/posts/4c78249.html">https://sangs3112.github.io/posts/4c78249.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://sangs3112.github.io" target="_blank">Sangs Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/Java%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF-%E5%8D%B7%E4%B8%80/">Java核心技术(卷一)</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/1d15a4a2.html" title="Java笔记_9"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java笔记_9</div></div></a></div><div class="next-post pull-right"><a href="/posts/ce24a37f.html" title="MySQL笔记_6"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">MySQL笔记_6</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Sangs</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Sangs3112" target="_blank" title="Github"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-fill"></use></svg></a><a class="social-icon" href="mailto:Sangs3112@163.com" target="_blank" title="Email"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-002_youxiang"></use></svg></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">异常</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-number">1.1.</span> <span class="toc-text">抛出异常的情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%BC%82%E5%B8%B8"><span class="toc-number">1.2.</span> <span class="toc-text">创建异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B8"><span class="toc-number">1.3.</span> <span class="toc-text">捕获异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%8D%E6%AC%A1%E6%8A%9B%E5%87%BA"><span class="toc-number">1.4.</span> <span class="toc-text">再次抛出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#finally%E5%AD%90%E5%8F%A5"><span class="toc-number">1.5.</span> <span class="toc-text">finally子句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#try-with-resources"><span class="toc-number">1.6.</span> <span class="toc-text">try-with-resources</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E8%BD%A8%E8%BF%B9"><span class="toc-number">1.7.</span> <span class="toc-text">栈轨迹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%BC%82%E5%B8%B8%E6%8A%80%E5%B7%A7"><span class="toc-number">1.8.</span> <span class="toc-text">使用异常技巧</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">断言</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b92393e9.html" title="MySQL笔记_7">MySQL笔记_7</a><time datetime="2024-12-12T09:17:11.144Z" title="发表于 2024-12-12 17:17:11">2024-12-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/f86b96e2.html" title="Go笔记_0">Go笔记_0</a><time datetime="2024-12-12T09:17:11.140Z" title="发表于 2024-12-12 17:17:11">2024-12-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/8f6ca674.html" title="Go笔记_1">Go笔记_1</a><time datetime="2024-12-12T09:17:11.140Z" title="发表于 2024-12-12 17:17:11">2024-12-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/ce24a37f.html" title="MySQL笔记_6">MySQL笔记_6</a><time datetime="2024-12-12T09:17:11.140Z" title="发表于 2024-12-12 17:17:11">2024-12-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/4c78249.html" title="Java笔记_10">Java笔记_10</a><time datetime="2024-12-12T01:18:00.000Z" title="发表于 2024-12-12 09:18:00">2024-12-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="Hexo" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/Sangs3112" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/ali_font.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
