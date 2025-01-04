@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java笔记_2 | Sangs Blog</title><meta name="author" content="Sangs"><meta name="copyright" content="Sangs"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="运行时数据区 分类  线程不共享：程序计数器、Java虚拟机栈、本地方法栈 线程共享：方法区、堆区  程序计数器  Program Counter Register，也叫做PC寄存器，每个线程会通过程序计数器记录当前要执行的字节码指令的地址  作用  控制程序指令的执行，比如跳转，分支，异常 多线程情况下JVM通过程序计数器记录CPU切换前执行到哪一句，切换回来后执行并继续解释运行  程序计数器会">
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java笔记_2 | Sangs Blog</title><meta name="author" content="Sangs"><meta name="copyright" content="Sangs"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="运行时数据区 分类  线程不共享: 程序计数器、Java虚拟机栈、本地方法栈 线程共享: 方法区、堆区  程序计数器  Program Counter Register, 也叫做PC寄存器, 每个线程会通过程序计数器记录当前要执行的字节码指令的地址  作用  控制程序指令的执行, 比如跳转, 分支, 异常 多线程情况下JVM通过程序计数器记录CPU切换前执行到哪一句, 切换回来后执行并继续解释运行">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java笔记_2">
 <meta property="og:url" content="https://sangs3112.github.io/posts/8ac77d2a.html">
 <meta property="og:site_name" content="Sangs Blog">
-<meta property="og:description" content="运行时数据区 分类  线程不共享：程序计数器、Java虚拟机栈、本地方法栈 线程共享：方法区、堆区  程序计数器  Program Counter Register，也叫做PC寄存器，每个线程会通过程序计数器记录当前要执行的字节码指令的地址  作用  控制程序指令的执行，比如跳转，分支，异常 多线程情况下JVM通过程序计数器记录CPU切换前执行到哪一句，切换回来后执行并继续解释运行  程序计数器会">
+<meta property="og:description" content="运行时数据区 分类  线程不共享: 程序计数器、Java虚拟机栈、本地方法栈 线程共享: 方法区、堆区  程序计数器  Program Counter Register, 也叫做PC寄存器, 每个线程会通过程序计数器记录当前要执行的字节码指令的地址  作用  控制程序指令的执行, 比如跳转, 分支, 异常 多线程情况下JVM通过程序计数器记录CPU切换前执行到哪一句, 切换回来后执行并继续解释运行">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://sangs3112.github.io/img/avatar.png">
 <meta property="article:published_time" content="2024-04-20T06:37:35.000Z">
-<meta property="article:modified_time" content="2025-01-03T13:53:56.906Z">
+<meta property="article:modified_time" content="2025-01-04T14:19:11.785Z">
 <meta property="article:author" content="Sangs">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="运行时数据区">
@@ -57,7 +57,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2025-01-03 21:53:56'
+  postUpdate: '2025-01-04 22:19:11'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -155,221 +155,239 @@
       }
       detectApple()
     })(window)</script><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><meta name="referrer" content="no-referrer" /><!-- hexo injector head_end start --><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://cdn.cbd.int/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Sangs Blog" type="application/atom+xml">
-</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Sangs Blog"><span class="site-name">Sangs Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Java笔记_2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-20T06:37:35.000Z" title="发表于 2024-04-20 14:37:35">2024-04-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-03T13:53:56.906Z" title="更新于 2025-01-03 21:53:56">2025-01-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1>运行时数据区</h1>
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Sangs Blog"><span class="site-name">Sangs Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><i class="fa-fw fas fa-home faa-tada"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/tags/"><i class="fa-fw fas fa-tags faa-tada"></i><span> 标签</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Java笔记_2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-20T06:37:35.000Z" title="发表于 2024-04-20 14:37:35">2024-04-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-04T14:19:11.785Z" title="更新于 2025-01-04 22:19:11">2025-01-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1>运行时数据区</h1>
 <h2 id="分类">分类</h2>
 <ol>
-<li>线程不共享：程序计数器、<code>Java</code>虚拟机栈、本地方法栈</li>
-<li>线程共享：方法区、堆区</li>
+<li>线程不共享: 程序计数器、<code>Java</code>虚拟机栈、本地方法栈</li>
+<li>线程共享: 方法区、堆区</li>
 </ol>
 <h2 id="程序计数器">程序计数器</h2>
 <blockquote>
-<p><code>Program Counter Register</code>，也叫做<code>PC</code>寄存器，每个线程会通过程序计数器记录当前<strong>要执行</strong>的字节码指令的地址</p>
+<p><code>Program Counter Register</code>, 也叫做<code>PC</code>寄存器, 每个线程会通过程序计数器记录当前<strong>要执行</strong>的字节码指令的地址</p>
 </blockquote>
 <h3 id="作用">作用</h3>
 <ol>
-<li>控制程序指令的执行，比如跳转，分支，异常</li>
-<li>多线程情况下<code>JVM</code>通过程序计数器记录CPU切换前执行到哪一句，切换回来后执行并继续解释运行</li>
+<li>控制程序指令的执行, 比如跳转, 分支, 异常</li>
+<li>多线程情况下<code>JVM</code>通过程序计数器记录CPU切换前执行到哪一句, 切换回来后执行并继续解释运行</li>
 </ol>
 <div class="note info flat"><p>程序计数器会产生内存溢出的问题吗</p>
 <ul>
-<li>内存溢出指在使用某一块内存区域时，存放的数据需要占用的内存大小超过了虚拟机能够提供的内存上限</li>
-<li>每个线程只存储一个固定长度的内存地址，<code>PC</code>不会产生内存溢出</li>
+<li>内存溢出指在使用某一块内存区域时, 存放的数据需要占用的内存大小超过了虚拟机能够提供的内存上限</li>
+<li>每个线程只存储一个固定长度的内存地址, 因此程序计数器不会产生内存溢出</li>
 <li><code>PC</code>不用程序员修改</li>
 </ul>
 </div>
 <h2 id="Java虚拟机栈"><code>Java</code>虚拟机栈</h2>
 <blockquote>
-<p>先进后出(<code>FILO</code>)，每个方法调用一个栈帧来保存</p>
+<p>先进后出(<code>FILO</code>), 每个方法调用一个栈帧来保存</p>
 </blockquote>
 <ul>
-<li><code>Java</code>虚拟机栈随着线程的创建而创建，线程销毁则栈回收，由于方法可能会在不同的线程中执行，所以每个线程都有自己的虚拟机栈</li>
+<li><code>Java</code>虚拟机栈随着线程的创建而创建, 线程销毁则栈回收</li>
+<li>由于方法可能会在不同的线程中执行, 所以每个线程都有自己的虚拟机栈</li>
 </ul>
 <h3 id="栈帧组成">栈帧组成</h3>
 <blockquote>
-<p>局部变量表，操作数栈，帧数据</p>
+<p>局部变量表, 操作数栈, 帧数据</p>
 </blockquote>
 <ol>
-<li>局部变量表：方法执行过程中存放所有的局部变量，与字节码局部变量表不太一样</li>
+<li>局部变量表: 方法执行过程中存放所有的局部变量, 与字节码局部变量表不太一样
+<ul>
+<li>栈帧中的局部变量表是一个数组, 每一个位置成为槽<code>slot</code>, <code>long, double</code>占用两个槽, 其他类型占用一个槽</li>
+<li>实例方法中的序号为<code>0</code>的位置存放的是<code>this</code>, 指的是当前调用方法的对象, 运行时会在内存中存放实例对象的地址</li>
+<li>方法参数也会保存在局部变量表中, 顺序与参数定义顺序一致</li>
+<li>所以局部变量表保存了实例方法的<code>this</code>对象, 方法的参数, 方法体中声明的局部变量</li>
+</ul>
+</li>
 </ol>
-<blockquote>
-<p>栈帧中的局部变量表是一个数组，每一个位置成为槽<code>slot</code>，<code>long, double</code>占用两个槽，其他类型占用一个槽<br>
-实例方法中的序号为<code>0</code>的位置存放的是<code>this</code>，指的是当前调用方法的对象，运行时会在内存中存放实例对象的地址<br>
-方法参数也会保存在局部变量表中，顺序与参数定义顺序一致<br>
-所以局部变量表保存了实例方法的<code>this</code>对象，方法的参数，方法体中声明的局部变量。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> m)</span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 占用了6个槽，为了节省空间，槽是可以复用的，一旦某个局部变量不再生效，则当前的槽可以再次使用</span></span><br><span class="line"><span class="comment">// ab在代码块中，代码块结束以后，ab就释放了</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> m)</span> &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 占用了6个槽, 为了节省空间, 槽是可以复用的, 一旦某个局部变量不再生效, 则当前的槽可以再次使用</span></span><br><span class="line"><span class="comment">// ab在代码块中, 代码块结束以后, ab就释放了</span></span><br></pre></td></tr></table></figure>
 <ol start="2">
-<li>操作数栈：存放中间数据的一块区域，如果一条指令将一个值压入操作数栈，则后面的指令可以弹出并使用该值</li>
+<li>操作数栈: 存放中间数据的一块区域, 如果一条指令将一个值压入操作数栈, 则后面的指令可以弹出并使用该值</li>
 </ol>
 <blockquote>
-<p><strong>编译期</strong>就可以确定操作数栈的最大深度，从而在执行时正确分配内存大小</p>
+<p><strong>编译期</strong>就可以确定操作数栈的最大深度, 从而在执行时正确分配内存大小</p>
 </blockquote>
 <ol start="3">
-<li>帧数据：包含动态链接，方法出口，异常表的引用</li>
-</ol>
-<blockquote>
-<p>动态链接保存的是符号引用到运行时常量池中内存地址的映射关系(比如引用其他类)<br>
-方法出口：方法在正确或异常结束时，栈帧会被弹出，PC应该指向那个<strong>上一个栈帧中的下一条指令的地址</strong>，所以在当前栈帧中，需要存储此方法的出口的地址<br>
-异常表引用：存放代码中的异常处理信息，包含异常捕获的生效范围以及异常发生以后跳转到的字节码指令位置</p>
-</blockquote>
-<div class="note info flat"><p>栈内存溢出</p>
+<li>帧数据: 包含动态链接, 方法出口, 异常表的引用
 <ul>
-<li>如果栈帧过多，占用内存超过栈内存可以分配的最大大小以后就会出现内存溢出</li>
-<li>会报<code>StackOverflowError</code>错误</li>
-<li>比如递归的时候没有设置递归出口，则会内存溢出</li>
+<li>动态链接保存的是符号引用到运行时常量池中内存地址的映射关系(比如引用其他类)</li>
+<li>方法出口: 方法在正确或异常结束时, 栈帧会被弹出, <code>PC</code>应该指向<strong>上一个栈帧中的下一条指令的地址</strong>, 所以在当前栈帧中, 需要存储此方法的出口的地址</li>
+<li>异常表引用: 存放代码中的异常处理信息, 包含异常捕获的生效范围以及异常发生以后跳转到的字节码指令位置</li>
 </ul>
+</li>
+</ol>
+<div class="note info flat"><ol>
+<li>
+<p>栈内存溢出</p>
+<ul>
+<li>如果栈帧过多, 占用内存超过栈内存可以分配的最大空间以后就会出现内存溢出, 报<code>StackOverflowError</code>错误</li>
+<li>比如递归的时候没有设置递归出口, 则会栈内存溢出</li>
+</ul>
+</li>
+<li>
 <p>设置栈内存</p>
 <ul>
-<li>通过参数<code>-Xss&lt;值&gt;</code>设置虚拟机栈大小，单位是[字节，必须是1024的倍数，默认] [k或者K] [m或者M] [g或者G]</li>
-<li>也可以用<code>-XX:ThreadStackSize=&lt;大小&gt;</code>，但是比较复杂</li>
-<li><code>HotSpot JVM</code>对栈的大小的最大值和最小值有要求，超过范围会自动调整</li>
-<li>局部变量过多，操作数栈深度过大也会影响栈内存大小</li>
+<li>通过参数<code>-Xss&lt;值&gt;</code>设置虚拟机栈大小, 单位是[字节, 且必须是1024的倍数, 默认] [k或者K] [m或者M] [g或者G]</li>
+<li>也可以用<code>-XX:ThreadStackSize=&lt;大小&gt;</code>, 但是比较复杂</li>
+<li><code>HotSpot JVM</code>对栈的大小的最大值和最小值有要求, 超过范围会自动调整</li>
+<li>局部变量过多, 操作数栈深度过大也会影响栈内存大小</li>
 <li>可以手动指定<code>-Xss256k</code>节省内存</li>
 </ul>
+</li>
+</ol>
 </div>
 <h2 id="本地方法栈">本地方法栈</h2>
 <blockquote>
-<p><code>Java</code>虚拟机栈存储了<code>Java</code>方法调用时的栈帧，本地方法栈存储的是本地方法的栈帧，用<code>cpp</code>编写的</p>
+<p><code>Java</code>虚拟机栈存储了<code>Java</code>方法调用时的栈帧, 本地方法栈存储的是本地方法的栈帧, 用<code>cpp</code>编写的</p>
 </blockquote>
 <ul>
-<li>在<code>Hotspot</code>虚拟机中，<code>Java</code>虚拟机栈和本地方法栈实现上用了同一个栈空间，本地方法栈会在栈内存上生成一个栈帧，临时保存方法参数的同时,方便出现异常时也把本地方法的栈信息打印出来</li>
+<li>在<code>Hotspot</code>虚拟机中, <code>Java</code>虚拟机栈和本地方法栈实现上用了同一个栈空间, 本地方法栈会在栈内存上生成一个栈帧, 临时保存方法参数的同时, 方便出现异常时也把本地方法的栈信息打印出来</li>
 </ul>
 <h2 id="堆">堆</h2>
 <blockquote>
-<p>堆内存是最大的内存区域，<strong>创建出来的对象都在堆上</strong><br>
-栈上的局部变量表中可以存放堆上对象的引用，静态变量也可以存放堆对象的引用，通过静态变量可以实现对象在线程之间共享</p>
+<p>堆内存是最大的内存区域, <strong>创建出来的对象都在堆上</strong></p>
+<p>栈上的局部变量表中可以存放堆上对象的<strong>引用</strong>, 静态变量也可以存放堆对象的引用, <strong>通过静态变量可以实现对象在线程之间共享</strong></p>
 </blockquote>
-<div class="note info flat"><p>堆内存溢出</p>
+<div class="note info flat"><ol>
+<li>堆内存溢出
 <ul>
-<li>堆内存大小有上限，如果一直向堆中放入对象达到上限后，就会抛出<code>OutOfMemory</code>错误</li>
-<li>有三个需要关注的值: <code>used, total, max</code>，在<code>Arthas</code>中可以使用<code>dashbord -i </code> 或者 <code>memory</code>命令查看
+<li>堆内存大小有上限, 如果一直向堆中放入对象达到上限后, 就会抛出<code>OutOfMemory</code>错误</li>
+<li>有三个需要关注的值: <code>used, total, max</code>, 在<code>Arthas</code>中可以使用<code>dashbord -i </code> or <code>memory</code>命令查看
 <ul>
-<li><code>used</code>：当前已经使用的堆内存</li>
-<li><code>total</code>：<code>Java</code>虚拟机已经分配的可用堆内存</li>
-<li><code>max</code>：是可以分配的最大堆内存</li>
-<li><code>total</code>内存不足的时候，<code>Java</code>会扩大<code>total</code>，直到达到<code>max</code>为止</li>
-</ul>
-<blockquote>
-<p>但是，<strong>不是</strong>在<code>total = used = max</code>的时候堆内存溢出，这是因为有垃圾回收器存在的原因</p>
-</blockquote>
+<li><code>used</code>: 当前已经使用的堆内存</li>
+<li><code>total</code>: <code>JVM</code>已经分配的可用堆内存</li>
+<li><code>max</code>: 是可以分配的最大堆内存
 <ul>
-<li>默认情况下，<code>max</code>默认是系统内存的<code>1/4</code>，<code>total</code>默认是系统内存的<code>1/64</code>，实际应用中需要单独设置</li>
-<li><code>-Xmx值 -Xms值</code>，分别表示<code>max</code>和<code>total</code>的大小，<code>max</code>必须大于<code>2MB</code>，<code>total</code>必须大于<code>1MB</code></li>
-<li>但是实际上<code>Arthas</code>堆内存显示的比实际上分配的要小一点，这是因为使用了<code>JMX</code>技术，与垃圾回收器有关，计算的是可以<strong>分配对象的内存，而不是整个内存</strong></li>
-<li>一般设置的时候，将<code>total</code>设置成<code>max</code>相同的大小，减少申请内存和压缩内存的开销。</li>
+<li><code>total</code>内存不足的时候, <code>JVM</code>会扩大<code>total</code>, 直到达到<code>max</code>为止</li>
+<li>但<strong>不是</strong>在<code>total = used = max</code>的时候产生堆内存溢出, 这是因为有垃圾回收器存在的原因</li>
+<li>默认情况下, <code>max</code>默认是系统内存的<code>1/4</code>, <code>total</code>默认是系统内存的<code>1/64</code>, 实际应用中需要单独设置</li>
+<li><code>-Xmx值 -Xms值</code>, 分别表示<code>max</code>和<code>total</code>的大小, <code>max</code>必须大于<code>2MB</code>, <code>total</code>必须大于<code>1MB</code></li>
+<li>但是实际上<code>Arthas</code>堆内存显示的比实际上分配的要小一点, 这是因为使用了<code>JMX</code>技术, 与垃圾回收器有关, 计算的是可以<strong>分配对象的内存, 而不是整个内存</strong></li>
 </ul>
 </li>
 </ul>
+</li>
+<li>一般设置的时候, 可以将<code>total</code>设置成<code>max</code>相同的大小, 减少申请内存和压缩内存的开销</li>
+</ul>
+</li>
+</ol>
 </div>
 <h2 id="方法区">方法区</h2>
 <blockquote>
-<p>存放基础信息的位置(类的元信息，运行时常量池，字符串常量池)，线程共享，是一个虚拟概念</p>
+<p>存放基础信息的位置(类的元信息, 运行时常量池, 字符串常量池), 线程间共享, 是一个虚拟概念</p>
 </blockquote>
 <ul>
-<li>用来存放每个类的基本信息(元信息)，一般称为<code>InstanceKlass</code>对象，在类的加载阶段完成</li>
-<li>还用来存放了字节码中的运行时常量池，通过<strong>编号查表</strong>的方式找到常量，称为<strong>静态常量池</strong>。常量池<strong>加载</strong>到内存中之后，可以通过内地址快读定位到常量池中的内容，就是<strong>运行时常量池</strong>。</li>
+<li>用来存放每个类的基本信息(元信息), 一般称为<code>InstanceKlass</code>对象, 在类的加载阶段完成</li>
+<li>还用来存放了字节码中的运行时常量池, 通过<strong>编号查表</strong>的方式找到常量, 称为<strong>静态常量池</strong></li>
+<li>常量池<strong>加载</strong>到内存中之后, 可以通过<strong>内地址快读</strong>定位到常量池中的内容, 就是<strong>运行时常量池</strong></li>
 </ul>
-<h3 id="JDK7以及之前"><code>JDK7</code>以及之前</h3>
+<h3 id="JDK-7以及之前"><code>JDK 7</code>以及之前</h3>
 <ul>
-<li>方法区存放在<strong>堆的永久代空间</strong>，堆的大小由虚拟机参数控制</li>
-<li>在<code>Arthas</code>中可以看见<code>ps_perm_gen</code>就是永久代，因为在堆上，所以设置了<code>max</code>，存储空间大小有限制</li>
+<li>方法区存放在<strong>堆的永久代空间</strong>, 堆的大小由<code>JVM</code>参数控制</li>
+<li>在<code>Arthas</code>中可以看见<code>ps_perm_gen</code>就是永久代, 因为在堆上, 所以设置了<code>max</code>, 存储空间大小有限制</li>
 </ul>
-<h3 id="JDK8以及之后"><code>JDK8</code>以及之后</h3>
+<h3 id="JDK-8以及之后"><code>JDK 8</code>以及之后</h3>
 <ul>
-<li>方法区存放在<strong>元空间</strong>中，位于<strong>操作系统内存</strong>中，独立于<code>JVM</code>内存之外，默认情况下只要不超过操作系统上限，可以一直分配</li>
-<li>在<code>Arthas</code>中可以看见<code>metaspace</code>，就是元空间，<code>max=-1</code>，表示没有上限，只要不超过操作系统的上限即可。</li>
+<li>方法区存放在<strong>元空间</strong>中, 位于<strong>操作系统内存</strong>中, 独立于<code>JVM</code>内存之外, 默认情况下只要不超过操作系统上限, 可以一直分配</li>
+<li>在<code>Arthas</code>中可以看见<code>metaspace</code>, 就是元空间, <code>max=-1</code>, 表示没有上限, 因此只要不超过操作系统的上限即可</li>
 </ul>
-<div class="note info flat"><p>方法区溢出</p>
+<div class="note info flat"><ol>
+<li>方法区溢出
 <ul>
-<li><code>JDK7</code>在堆上，十几万个类会出现错误。<code>JDK8</code>运行上百万次，不会出现错误。</li>
-<li><code>JDK7</code>方法区存储在堆区中的永久代空间，可以设置<code>-XX:MaxPermSize=值</code>来控制</li>
-<li><code>JDK8</code>方法区位于元空间中，默认不超过操作系统上限即可，同样可以使用<code>-XX:MaxMetaspaceSize=值</code>设置元空间大小
-<ul>
-<li>启动程序的时候最好设置元空间的最大大小，没有特殊情况设置成<code>256M</code>，以免占用其他程序的内存，能够容纳三十多万个类的加载</li>
+<li><code>JDK 7</code>在堆上, 十几万个类会出现错误</li>
+<li><code>JDK 8</code>运行上百万次, 不会出现错误</li>
+<li><code>JDK 7</code>方法区存储在堆区中的永久代空间, 可以设置<code>-XX:MaxPermSize=值</code>来控制</li>
+<li><code>JDK 8</code>方法区位于元空间中, 默认不超过操作系统内存上限即可, 同样可以使用<code>-XX:MaxMetaspaceSize=值</code>设置元空间大小</li>
+<li>启动程序的时候最好设置元空间的最大大小, 没有特殊情况设置成<code>256M</code>, 以免占用其他程序的内存, 能够容纳三十多万个类的加载</li>
 </ul>
 </li>
-</ul>
+</ol>
 </div>
 <h3 id="字符串常量池">字符串常量池</h3>
 <blockquote>
-<p>存储代码中定义的常量字符串内容，比如<code>&quot;123&quot;</code></p>
+<p>存储代码中定义的常量字符串内容, 比如<code>&quot;123&quot;</code></p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        System.out.println(s1 == s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 编译成字节码以后，&quot;abc&quot;会加入到静态常量池中</span></span><br><span class="line"><span class="comment">// s1通过new创建，所以&quot;abc&quot;放在堆内存中，由s1保存</span></span><br><span class="line"><span class="comment">// s2没有使用new，所以s2存放的是字符串常量池中的&quot;abc&quot;</span></span><br><span class="line"><span class="comment">// 所以最后打印s1 == s2两个地址不同，返回false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">        System.out.println(s1 == s2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 编译成字节码以后, &quot;abc&quot;会加入到静态常量池中</span></span><br><span class="line"><span class="comment">// s1通过new创建, 所以&quot;abc&quot;放在堆内存中, 由s1保存</span></span><br><span class="line"><span class="comment">// s2没有使用new, 所以s2存放的是字符串常量池中的&quot;abc&quot;</span></span><br><span class="line"><span class="comment">// 所以最后打印s1 == s2两个地址不同, 返回false</span></span><br></pre></td></tr></table></figure>
 <div class="note info flat"><ul>
-<li>早期的设计中，字符串常量池是运行时常量池的一部分，存储位置相同。后续将字符串常量池和运行时常量池进行拆分</li>
-<li><code>JDK7</code>之前，运行时常量池包含字符串常量池，都在永久代中</li>
-<li><code>JDK7</code>版本的时候，字符串常量池从方法区拿到了堆中，运行时常量池剩下的东西还在永久代中</li>
-<li><code>JDK8</code>之后，没有永久代了，所以运行时常量池在元空间中，而字符串常量池仍然在堆中</li>
+<li>早期的设计中, 字符串常量池是运行时常量池的一部分, 存储位置相同, 但后续将字符串常量池和运行时常量池进行拆分</li>
+<li><code>JDK 7</code>之前, 运行时常量池包含字符串常量池, 都在方法区的永久代中</li>
+<li><code>JDK 7</code>时, 字符串常量池从方法区拿到了堆中, 运行时常量池剩下的东西还在方法区的永久代中</li>
+<li><code>JDK 8</code>之后, 没有永久代了, 所以运行时常量池在元空间中, 而字符串常量池仍然在堆中</li>
 </ul>
 </div>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;1&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="string">&quot;2&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">c</span> <span class="operator">=</span> <span class="string">&quot;12&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">d</span> <span class="operator">=</span> a + b;</span><br><span class="line">    System.out.println(c == d);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 编译成字节码以后，字符串常量池中会有&quot;1&quot;, &quot;2&quot;, &quot;12&quot;</span></span><br><span class="line"><span class="comment">// c指向的是字符串常量池中的&quot;12&quot;</span></span><br><span class="line"><span class="comment">// d 中的 + 变成了使用StringBuilder方法进行连接</span></span><br><span class="line"><span class="comment">// d指向的是堆内存中的&quot;12&quot;</span></span><br><span class="line"><span class="comment">// 所以是false</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;1&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="string">&quot;2&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">c</span> <span class="operator">=</span> <span class="string">&quot;12&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">d</span> <span class="operator">=</span> <span class="string">&quot;1&quot;</span> + <span class="string">&quot;2&quot;</span>;</span><br><span class="line">    System.out.println(c == d);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 此时cd都是在字符串常量池中</span></span><br><span class="line"><span class="comment">// 所以返回true</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>().append(<span class="string">&quot;think&quot;</span>).append(<span class="string">&quot;123&quot;</span>).toString();</span><br><span class="line">    System.out.println(s1.intern() == s1);</span><br><span class="line">    <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>().append(<span class="string">&quot;ja&quot;</span>).append(<span class="string">&quot;va&quot;</span>).toString();</span><br><span class="line">    System.out.println(s2.inter() == s2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// String.intern()是手动将字符串放在字符串常量池中</span></span><br><span class="line"><span class="comment">// 比如多次输入，每次Scanner.next().intern()，如果有两次输入相同的字符串，就可以减少存储的消耗，只需要往字符串常量池中存储一份字符串即可</span></span><br><span class="line"><span class="comment">// JDK6这个版本中，intern()会把第一次遇到的字符串实例复制到永久代字符串常量池中，返回的也是永久代字符串实例的引用。JVM启动时会把java加入到常量池中</span></span><br><span class="line">    <span class="comment">// 所以JDK6中，s1.intern()方法在字符串常量池中，s1在堆上，返回false</span></span><br><span class="line">    <span class="comment">// s2.intern()在字符串常量池中，s2在堆上，所以返回false</span></span><br><span class="line"><span class="comment">// JDK7之后的版本，由于字符串常量池在堆上，所以intern()方法会把第一次遇到的字符串引用放在字符串常量池中</span></span><br><span class="line">     <span class="comment">// s1.intern()返回的就是s1在堆上的引用，也就是地址，所以返回true</span></span><br><span class="line">     <span class="comment">// s2.intern()由于java已经在字符串常量池中有了，所以s2.intern()是字符串常量池中的地址，s2是堆中的地址，因此返回false</span></span><br></pre></td></tr></table></figure>
-<div class="note info flat"><p>静态变量存储在哪里？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;1&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="string">&quot;2&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">c</span> <span class="operator">=</span> <span class="string">&quot;12&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">d</span> <span class="operator">=</span> a + b;</span><br><span class="line">    System.out.println(c == d);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 编译成字节码以后, 字符串常量池中会有&quot;1&quot;, &quot;2&quot;, &quot;12&quot;</span></span><br><span class="line"><span class="comment">// c 指向的是字符串常量池中的&quot;12&quot;</span></span><br><span class="line"><span class="comment">// d 中的 + 变成了使用StringBuilder方法进行连接</span></span><br><span class="line"><span class="comment">// d指向的是堆内存中的&quot;12&quot;</span></span><br><span class="line"><span class="comment">// 所以是false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;1&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="string">&quot;2&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">c</span> <span class="operator">=</span> <span class="string">&quot;12&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">d</span> <span class="operator">=</span> <span class="string">&quot;1&quot;</span> + <span class="string">&quot;2&quot;</span>;</span><br><span class="line">    System.out.println(c == d);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 此时cd都是在字符串常量池中</span></span><br><span class="line"><span class="comment">// 所以返回true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>().append(<span class="string">&quot;think&quot;</span>).append(<span class="string">&quot;123&quot;</span>).toString();</span><br><span class="line">    System.out.println(s1.intern() == s1);</span><br><span class="line">    <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>().append(<span class="string">&quot;ja&quot;</span>).append(<span class="string">&quot;va&quot;</span>).toString();</span><br><span class="line">    System.out.println(s2.intern() == s2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// String.intern()是手动将字符串放在字符串常量池中</span></span><br><span class="line"><span class="comment">// 比如多次输入, 每次Scanner.next().intern(), 如果有两次输入相同的字符串, 就可以减少存储的消耗, 只需要往字符串常量池中存储一份字符串即可</span></span><br><span class="line"><span class="comment">// JDK 6这个版本中, intern()会把第一次遇到的字符串实例复制到永久代字符串常量池中, 返回的也是永久代字符串实例的引用, JVM启动时会把&quot;java&quot;加入到常量池中</span></span><br><span class="line">    <span class="comment">// 所以JDK 6中, s1.intern()方法在字符串常量池中, s1在堆上，返回false</span></span><br><span class="line">    <span class="comment">// s2.intern()在字符串常量池中, s2在堆上, 所以返回false</span></span><br><span class="line"><span class="comment">// JDK 7之后的版本, 由于字符串常量池在堆上, 所以intern()会把第一次遇到的字符串引用放在字符串常量池中</span></span><br><span class="line">    <span class="comment">// s1.intern()返回的就是s1在堆上的引用, 也就是地址, 所以返回true</span></span><br><span class="line">    <span class="comment">// s2.intern()由于java已经在字符串常量池中有了,. 所以s2.intern()是字符串常量池中的地址, s2是堆中的地址, 因此返回false</span></span><br></pre></td></tr></table></figure>
+<div class="note info flat"><ol>
+<li>静态变量存储在哪里?
 <ul>
-<li><code>JDK6</code>以及之前，静态变量存储在方法区中，也就是永久代中</li>
-<li><code>JDK7</code>以及之后的版本中，静态变量存储在<code>Class</code>对象中，脱离了永久代。</li>
+<li><code>JDK 6</code>以及之前, 静态变量存储在方法区中, 也就是永久代中</li>
+<li><code>JDK 7</code>以及之后的版本中, 静态变量存储在<code>Class</code>对象中, 脱离了永久代</li>
 </ul>
+</li>
+</ol>
 </div>
 <h2 id="直接内存">直接内存</h2>
 <blockquote>
-<p>不属于<code>Java</code>运行时的内存区域，在<code>JDK1.4</code>中引入了<code>NIO</code>机制，使用了直接内存，比如<code>Netty</code>网络框架</p>
+<p>不属于<code>Java</code>运行时的内存区域, 在<code>JDK 1.4</code>中引入了<code>NIO</code>机制, 使用了直接内存, 比如<code>Netty</code>网络框架</p>
 </blockquote>
 <ul>
 <li>
 <p>直接内存解决两个问题</p>
 <ol>
-<li><code>Java</code>堆中的对象如果不再使用要回收，回收时会影响对象的创建和使用</li>
-<li><code>IO</code>操作比如读文件，需要先把文件读入直接内存(缓冲区)，然后再把数据复制到<code>Java</code>堆中</li>
+<li><code>Java</code>堆中的对象如果不再使用要回收, 回收时会影响对象的创建和使用</li>
+<li><code>IO</code>操作比如读文件, 需要先把文件读入直接内存(缓冲区), 然后再把数据复制到<code>Java</code>堆中</li>
 </ol>
 </li>
 <li>
-<p>现在直接放入直接内存即可，同时<code>Java</code>堆上维护直接内存的引用，减少了数据复制的开销，写文件也是同样的思路</p>
+<p>现在直接放入直接内存即可, 同时<code>Java</code>堆上维护直接内存的引用, 减少了数据复制的开销, 写文件也是同样的思路</p>
 </li>
 <li>
-<p>所以现在不需要从直接内存上复制到堆中了，减少回收对象的影响，提升读写文件的效率</p>
+<p>所以现在不需要从直接内存上复制到堆中了, 减少回收对象的影响, 提升读写文件的效率</p>
 </li>
 <li>
-<p>可以使用<code>ByteBuffer</code>在直接内存上创建数据，在<code>Arthas</code>中的<code>memory</code>可以查看<code>direct</code>部分的相关信息</p>
+<p>可以使用<code>ByteBuffer</code>在直接内存上创建数据, 在<code>Arthas</code>中的<code>memory</code>可以查看<code>direct</code>部分的相关信息</p>
 <ul>
 <li><code>ByteBuffer directBuffer = ByteBuffer.allocateDirect(size);</code></li>
 </ul>
 </li>
 </ul>
-<div class="note info flat"><p>直接内存存在溢出现象</p>
+<div class="note info flat"><ol>
+<li>直接内存存在溢出现象
 <ul>
-<li><code>-XX:MaxDirectMemorySize=值</code>修改直接内存的大小，如果不设置这个参数，则会自动选择最大分配的大小</li>
-<li>如果底层使用了<code>NIO</code>，则需要设置这个参数；如果没有用到直接内存，也可以不设置这个参数</li>
-<li>具体设置的大小需要进行压力测试以后，确定最大内存</li>
+<li><code>-XX:MaxDirectMemorySize=值</code>修改直接内存的大小, 如果不设置这个参数, 则会自动选择最大分配的大小</li>
+<li>如果底层使用了<code>NIO</code>, 则需要设置这个参数; 如果没有用到直接内存, 也可以不设置这个参数</li>
+<li>具体设置的大小需要进行压力测试以后, 确定最大内存</li>
 </ul>
+</li>
+</ol>
 </div>
 <h2 id="总结">总结</h2>
 <ol>
-<li>运行时数据区分为了哪几个部分，每个部分的作用是什么</li>
-</ol>
+<li>运行时数据区分为了哪几个部分? 每个部分的作用是什么?
 <ul>
-<li>程序计数器，<code>Java</code>虚拟机栈，本地方法栈。线程不共享，每个线程有一块独立的区域
+<li>程序计数器, <code>Java</code>虚拟机栈, 本地方法栈. 是线程不共享, 每个线程有一块独立的区域
 <ul>
-<li>程序计数器，记录当前要执行的字节码指令的地址，不会出现内存溢出的问题</li>
-<li>Java虚拟机栈和本地方法栈。每个方法的调用会使用一个栈帧来保存数据，会内存溢出，一般因为递归没有出口</li>
+<li>程序计数器: 记录当前要执行的字节码指令的地址, 不会出现内存溢出的问题</li>
+<li>Java虚拟机栈和本地方法栈: 每个方法的调用会使用一个栈帧来保存数据, 会内存溢出, 一般因为递归没有出口</li>
 </ul>
 </li>
-<li>方法区，堆。线程共享的
+<li>方法区, 堆, 是线程共享的
 <ul>
-<li>堆中存放创建的对象，最容易内存溢出，与垃圾回收有关</li>
-<li>方法区存放类的元信息，以及常量池，会出现内存溢出</li>
+<li>堆中存放创建的对象, 最容易内存溢出, 与垃圾回收有关</li>
+<li>方法区存放类的元信息, 以及常量池, 会出现内存溢出</li>
 </ul>
 </li>
 </ul>
-<ol start="2">
-<li>不同<code>JDK</code>版本之间运行时区域的区别是什么</li>
-</ol>
+</li>
+<li>不同<code>JDK</code>版本之间运行时区域的区别是什么?
 <ul>
-<li><code>JDK6</code>方法区放在堆里面，称为永久代，字符串常量池放在方法区中</li>
-<li><code>JDK7</code>字符串常量池从方法区中独立，放在了堆上</li>
-<li><code>JDK8</code>字符串常量池依然在堆里面，但是方法区称为元空间，从堆中独立</li>
+<li><code>JDK 6</code>方法区放在堆里面, 称为永久代, 字符串常量池放在方法区中</li>
+<li><code>JDK 7</code>字符串常量池从方法区中独立, 放在了堆上</li>
+<li><code>JDK 8</code>字符串常量池依然在堆里面, 但是方法区称为元空间, 从堆中独立</li>
 </ul>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io">Sangs</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io/posts/8ac77d2a.html">https://sangs3112.github.io/posts/8ac77d2a.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://sangs3112.github.io" target="_blank">Sangs Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/13ce2c90.html" title="Java笔记_1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java笔记_1</div></div></a></div><div class="next-post pull-right"><a href="/posts/fdc04dbc.html" title="Java笔记_3"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java笔记_3</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Sangs</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Sangs3112" target="_blank" title="Github"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-fill"></use></svg></a><a class="social-icon" href="mailto:Sangs3112@163.com" target="_blank" title="Email"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-002_youxiang"></use></svg></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">运行时数据区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="toc-number">1.2.</span> <span class="toc-text">程序计数器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.1.</span> <span class="toc-text">作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88"><span class="toc-number">1.3.</span> <span class="toc-text">Java虚拟机栈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%88%E5%B8%A7%E7%BB%84%E6%88%90"><span class="toc-number">1.3.1.</span> <span class="toc-text">栈帧组成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-number">1.4.</span> <span class="toc-text">本地方法栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86"><span class="toc-number">1.5.</span> <span class="toc-text">堆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA"><span class="toc-number">1.6.</span> <span class="toc-text">方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK7%E4%BB%A5%E5%8F%8A%E4%B9%8B%E5%89%8D"><span class="toc-number">1.6.1.</span> <span class="toc-text">JDK7以及之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK8%E4%BB%A5%E5%8F%8A%E4%B9%8B%E5%90%8E"><span class="toc-number">1.6.2.</span> <span class="toc-text">JDK8以及之后</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">1.6.3.</span> <span class="toc-text">字符串常量池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98"><span class="toc-number">1.7.</span> <span class="toc-text">直接内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.8.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/ce24a37f.html" title="MySQL笔记_6">MySQL笔记_6</a><time datetime="2025-01-03T13:53:56.907Z" title="发表于 2025-01-03 21:53:56">2025-01-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b92393e9.html" title="MySQL笔记_7">MySQL笔记_7</a><time datetime="2025-01-03T13:53:56.907Z" title="发表于 2025-01-03 21:53:56">2025-01-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/8f6ca674.html" title="Go笔记_1">Go笔记_1</a><time datetime="2025-01-03T13:53:56.905Z" title="发表于 2025-01-03 21:53:56">2025-01-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/f86b96e2.html" title="Go笔记_0">Go笔记_0</a><time datetime="2025-01-03T13:53:56.904Z" title="发表于 2025-01-03 21:53:56">2025-01-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/9dced3f3.html" title="Java笔记_13">Java笔记_13</a><time datetime="2024-12-16T01:18:00.000Z" title="发表于 2024-12-16 09:18:00">2024-12-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io">Sangs</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sangs3112.github.io/posts/8ac77d2a.html">https://sangs3112.github.io/posts/8ac77d2a.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://sangs3112.github.io" target="_blank">Sangs Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/13ce2c90.html" title="Java笔记_1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java笔记_1</div></div></a></div><div class="next-post pull-right"><a href="/posts/fdc04dbc.html" title="Java笔记_3"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java笔记_3</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Sangs</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Sangs3112" target="_blank" title="Github"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-fill"></use></svg></a><a class="social-icon" href="mailto:Sangs3112@163.com" target="_blank" title="Email"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-002_youxiang"></use></svg></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">运行时数据区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="toc-number">1.2.</span> <span class="toc-text">程序计数器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.2.1.</span> <span class="toc-text">作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88"><span class="toc-number">1.3.</span> <span class="toc-text">Java虚拟机栈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%88%E5%B8%A7%E7%BB%84%E6%88%90"><span class="toc-number">1.3.1.</span> <span class="toc-text">栈帧组成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-number">1.4.</span> <span class="toc-text">本地方法栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86"><span class="toc-number">1.5.</span> <span class="toc-text">堆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA"><span class="toc-number">1.6.</span> <span class="toc-text">方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK-7%E4%BB%A5%E5%8F%8A%E4%B9%8B%E5%89%8D"><span class="toc-number">1.6.1.</span> <span class="toc-text">JDK 7以及之前</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK-8%E4%BB%A5%E5%8F%8A%E4%B9%8B%E5%90%8E"><span class="toc-number">1.6.2.</span> <span class="toc-text">JDK 8以及之后</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">1.6.3.</span> <span class="toc-text">字符串常量池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98"><span class="toc-number">1.7.</span> <span class="toc-text">直接内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.8.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/ce24a37f.html" title="MySQL笔记_6">MySQL笔记_6</a><time datetime="2025-01-04T14:19:11.787Z" title="发表于 2025-01-04 22:19:11">2025-01-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b92393e9.html" title="MySQL笔记_7">MySQL笔记_7</a><time datetime="2025-01-04T14:19:11.787Z" title="发表于 2025-01-04 22:19:11">2025-01-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/f86b96e2.html" title="Go笔记_0">Go笔记_0</a><time datetime="2025-01-04T14:19:11.783Z" title="发表于 2025-01-04 22:19:11">2025-01-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/8f6ca674.html" title="Go笔记_1">Go笔记_1</a><time datetime="2025-01-04T14:19:11.783Z" title="发表于 2025-01-04 22:19:11">2025-01-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/9dced3f3.html" title="Java笔记_13">Java笔记_13</a><time datetime="2024-12-16T01:18:00.000Z" title="发表于 2024-12-16 09:18:00">2024-12-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
   function butterfly_footer_beautify_injector_config(){
     var parent_div_git = document.getElementById('footer-wrap');
     var item_html = '<p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="Hexo" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/Sangs3112" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
