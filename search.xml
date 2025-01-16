@@ -118,6 +118,35 @@
     
     
     <entry>
+      <title>安卓逆向笔记_0</title>
+      <link href="/posts/4dd06a82.html"/>
+      <url>/posts/4dd06a82.html</url>
+      
+        <content type="html"><![CDATA[<h1>环境配置</h1><ol><li><p>雷电模拟器9(<code>debug</code>版)</p><ul><li>开启<code>Root</code>权限</li></ul></li><li><p>安装面具(<code>app-debug.apk</code>)</p><ul><li>进入主页后安装<code>Magisk</code>, 会发现只勾选了<code>安装到Recovery</code>, 不要点击其他内容</li><li>直接控制台杀死进程</li><li>重新打开面具, 再次点击安装, 发现勾选了两个选项, 点击下一步</li><li>方式选择<code>安装至系统分区</code>, 点击开始</li><li>如果出现了<code>Installation failed</code>, 需要在雷电模拟器的<code>设置</code>中选择<code>磁盘</code> -&gt; <code>系统磁盘</code>, 勾选<code>可写入</code></li><li>出现<code>All done</code>表示安装完成</li><li>重启模拟器</li><li>再次启动面具, 如果有弹窗<code>异常状态: 检测到不属于Magisk的su文件</code>直接<code>确定</code>不需要管</li><li>在面具的设置中打开<code>Zygisk</code></li></ul></li></ol><div class="note info flat"><ul><li>关于<code>异常状态</code>的提示, 可以进入模拟器的文件管理器</li><li><code>System</code> -&gt; <code>xbin</code>删除其中的<code>su</code>文件, 第一次删除失败就再删一次, 就可以消除这个提示</li></ul></div><ol start="2"><li><p><code>LSPosed</code>模块</p><ul><li>模拟器右侧<code>更多</code> -&gt; <code>共享文件夹</code> -&gt; <code>打开电脑文件夹</code> -&gt; 将<code>LSPosed.zip</code>拖到文件夹中</li><li>面具下面的<code>模块</code> -&gt; <code>从本地安装</code> -&gt; 右边选择<code>文件管理器</code> -&gt; 找到刚刚的共享文件夹 -&gt; 直接点击压缩包即可开始安装</li><li>出现<code>Done</code>表示安装完成, 重启模拟器</li><li>再次进入面具, 点击<code>模块</code>, 如果出现了<code>Zygisk-LSPosed</code>表示安装完成</li></ul></li><li><p>核心破解</p><ul><li>直接安装<code>核心破解.apk</code></li><li>提示<code>已安装, 但尚未激活</code>, 点击提示</li><li><code>启用模块</code> -&gt; 勾选<code>系统框架</code>, 重启模拟器</li></ul></li><li><p>算法助手</p><ul><li>安装<code>算法助手.apk</code></li><li>点击提示, 勾选需要<code>Hook</code>的软件即可, 然后重启<code>算法助手</code>即可</li><li>如果出现模块未启动, 重启模拟器即可</li><li>开启需要<code>Hook</code>对象的应用开关, 勾选<code>弹窗定位</code>, 点击右上角的启动</li></ul></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Reverse </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Android </tag>
+            
+            <tag> Reverse </tag>
+            
+            <tag> Environment </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Java笔记_13</title>
       <link href="/posts/9dced3f3.html"/>
       <url>/posts/9dced3f3.html</url>
